@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Inna Makhova](https://up.htmlacademy.ru/javascript/23/user/1174641).
-* Наставник: `Неизвестно`.
+* Наставник: [Дина Абрамова] (https://htmlacademy.ru/profile/id1483099).
 
 ---
 
