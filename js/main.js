@@ -66,10 +66,10 @@ function getAdvertAdress(locationX, locationY) {
   return `${locationX}, ${locationY}`;
 }
 
-function getAdvertOffer() {
+function getAdvertOffer(location) {
   return {
     title: 'Идеальное жилье для любителей музыки',
-    address: getAdvertAdress(),
+    address: getAdvertAdress(location.lat, location.lng),
     price: getRandomInteger(1, 100000),
     type: TYPES[getRandomInteger(0, TYPES.length-1)],
     rooms: getRandomInteger(1, 10),
@@ -89,17 +89,13 @@ function getAdvertLocation() {
   };
 }
 
-function getAdvertsArray() {
-  const adverts = [];
-  for (let advertCounter = 1; advertCounter <= ADVERTS_NUMBER; advertCounter++) {
-    const advert = {
-      author: getAdvertAuthor(advertCounter),
-      offer: getAdvertOffer(),
-      location: getAdvertLocation(),
-    };
-    adverts.push(advert);
-  }
-  return adverts;
+function getAdvert(index) {
+  const location = getAdvertLocation();
+  return {
+    author: getAdvertAuthor(index),
+    offer: getAdvertOffer(location),
+    location: location,
+  };
 }
 
-getAdvertsArray();
+const ADVERTS = new Array(ADVERTS_NUMBER).fill(null).map((_element, index) => getAdvert(index + 1));
