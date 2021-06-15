@@ -73,4 +73,10 @@ function getAdvert(index) {
   };
 }
 
-const ADVERTS = new Array(ADVERTS_NUMBER).fill(null).map((_element, index) => getAdvert(index + 1));
+function getAdvertsArray() {
+  const ADVERTS = new Array(ADVERTS_NUMBER).fill(null).map((_element, index) => getAdvert(index + 1));
+  return ADVERTS;
+}
+
+getAdvertsArray();
+
