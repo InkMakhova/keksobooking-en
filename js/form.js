@@ -1,3 +1,5 @@
+import {setDisabledAttribute} from './util.js';
+
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 
@@ -24,8 +26,8 @@ function deactivatePage() {
   mapFilters.classList.add('map__filters--disabled');
 
   //делаем поля формы и фильтры карты неактивными
-  formFields.forEach((field) => field.setAttribute('disabled', 'disabled'));
-  mapFilterFields.forEach((field) => field.setAttribute('disabled', 'disabled'));
+  setDisabledAttribute(formFields, true);
+  setDisabledAttribute(mapFilterFields, true);
 }
 
 function activatePage() {
@@ -34,8 +36,8 @@ function activatePage() {
   mapFilters.classList.remove('map__filters--disabled');
 
   //делаем поля формы и фильтры карты активными
-  formFields.forEach((field) => field.removeAttribute('disabled', 'disabled'));
-  mapFilterFields.forEach((field) => field.removeAttribute('disabled', 'disabled'));
+  setDisabledAttribute(formFields, false);
+  setDisabledAttribute(mapFilterFields, false);
 }
 
 function getMinPrice() {
