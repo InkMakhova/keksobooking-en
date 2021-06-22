@@ -1,4 +1,5 @@
 import {getAdvertsArray} from './data.js';
+import {deactivatePage, activatePage} from './form.js';
 
 const map = document.querySelector('.map');
 const mapCanvas = map.querySelector('#map-canvas');
@@ -6,7 +7,7 @@ const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
 
-const accomodationType = {
+const ACCOMODATION_TYPE = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -14,12 +15,20 @@ const accomodationType = {
   hotel: 'Отель',
 };
 
+const isMapLoaded = false;
+function activatePageStatus() {
+  if (isMapLoaded) {
+    return activatePage();
+  }
+  return deactivatePage();
+}
+
 function createCard(advert) {
   const card = cardTemplate.cloneNode(true);
   card.querySelector('.popup__title').textContent = advert.offer.title;
   card.querySelector('.popup__text--address').textContent = advert.offer.address;
   card.querySelector('.popup__text--price').textContent = `${String(advert.offer.price)} ₽/ночь`;
-  card.querySelector('.popup__type').textContent = accomodationType[advert.offer.type];
+  card.querySelector('.popup__type').textContent = ACCOMODATION_TYPE[advert.offer.type];
   card.querySelector('.popup__text--capacity').textContent = `${String(advert.offer.rooms)} комнаты для ${String(advert.offer.guests)} гостей`;
   card.querySelector('.popup__text--time').textContent = `Заезд после ${advert.offer.checkin}, выезд до ${advert.offer.checkout}`;
 
@@ -72,3 +81,4 @@ function createCardsArray() {
 }
 
 mapCanvas.append(createCardsArray()[0]);
+activatePageStatus();

@@ -25,4 +25,8 @@ function getRandomFloat(min, max, numberOfDigitsAfterComma) {
   return ((Math.random() * (max - min)) + min).toFixed(numberOfDigitsAfterComma);
 }
 
-export {getRandomInteger, getRandomFloat};
+function setDisabledAttribute(fields, isDisabled) {
+  fields.forEach((field) => field.disabled = isDisabled);
+}
+
+export {getRandomInteger, getRandomFloat, setDisabledAttribute};
