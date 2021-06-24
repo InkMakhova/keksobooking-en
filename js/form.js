@@ -7,6 +7,7 @@ const formFields = adForm.querySelectorAll('fieldset');
 const mapFilterFields = mapFilters.querySelectorAll('select');
 
 const titleInput = adForm.querySelector('#title');
+const addressInput = adForm.querySelector('#address');
 const priceInput = adForm.querySelector('#price');
 const typeInput = adForm.querySelector('#type');
 const roomNumber = adForm.querySelector('#room_number');
@@ -134,4 +135,4 @@ typeInput.addEventListener('change', (evt) => {
   validatePrice();
 });
 
-export {deactivatePage, activatePage};
+export {deactivatePage, activatePage, addressInput};

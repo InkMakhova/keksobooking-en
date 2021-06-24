@@ -1,8 +1,10 @@
 import {getAdvertsArray} from './data.js';
-import {deactivatePage, activatePage} from './form.js';
+import {deactivatePage, activatePage, addressInput} from './form.js';
 
-const map = document.querySelector('.map');
-const mapCanvas = map.querySelector('#map-canvas');
+deactivatePage();
+
+const mapBox = document.querySelector('.map');
+const mapCanvas = mapBox.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
@@ -15,21 +17,48 @@ const ACCOMODATION_TYPE = {
   hotel: 'Отель',
 };
 
-deactivatePage();
+const MAIN_COORDINATES = {
+  lat: 35.68553153747553,
+  lng: 139.75276363268588,
+};
 
-const mapBox = L.map(mapCanvas)
+const ACCURACY = 5;
+
+addressInput.value = `${MAIN_COORDINATES.lat.toFixed(ACCURACY)}, ${MAIN_COORDINATES.lng.toFixed(ACCURACY)}`;
+
+const map = L.map(mapCanvas)
   .on('load', () => activatePage())
-  .setView({
-    lat: 35.68553153747553,
-    lng: 139.75276363268588,
-  }, 10);
+  .setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], 10);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
-).addTo(mapBox);
+).addTo(map);
+
+const mainPinIcon = L.icon({
+  iconUrl: '../img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
+
+const mainPinMarker = L.marker(
+  {
+    lat: MAIN_COORDINATES.lat,
+    lng: MAIN_COORDINATES.lng,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+
+mainPinMarker.addTo(map);
+
+mainPinMarker.on('moveend', (evt) => {
+  addressInput.value = `${evt.target.getLatLng().lat.toFixed(ACCURACY)}, ${evt.target.getLatLng().lng.toFixed(ACCURACY)}`;
+});
 
 function createCard(advert) {
   const card = cardTemplate.cloneNode(true);
