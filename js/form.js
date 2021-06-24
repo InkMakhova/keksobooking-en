@@ -114,12 +114,8 @@ function getValidCapacityOptions(rooms) {
 }
 
 //устанавливаем время заезда-выезда
-function setTimeOption(options, evt) {
-  options.forEach((option) => {
-    if (option.value === evt.target.value) {
-      option.selected = true;
-    }
-  });
+function setTimeOption(field, evt) {
+  field.value = evt.target.value;
 }
 
 //устанавливаем правильный плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
@@ -146,10 +142,10 @@ typeInput.addEventListener('change', (evt) => {
 });
 
 timeIn.addEventListener('change', (evt) => {
-  setTimeOption(timeOutOptions, evt);
+  setTimeOption(timeOut, evt);
 });
 timeOut.addEventListener('change', (evt) => {
-  setTimeOption(timeInOptions, evt);
+  setTimeOption(timeIn, evt);
 });
 
 export {deactivatePage, activatePage};
