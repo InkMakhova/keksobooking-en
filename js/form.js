@@ -12,6 +12,10 @@ const typeInput = adForm.querySelector('#type');
 const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const capacityOptions = capacity.querySelectorAll('option');
+const timeIn = adForm.querySelector('#timein');
+const timeInOptions = timeIn.querySelectorAll('option');
+const timeOut = adForm.querySelector('#timeout');
+const timeOutOptions = timeOut.querySelectorAll('option');
 
 const MIN_ACCOMODATION_PRICES = {
   bungalow: 0,
@@ -109,6 +113,11 @@ function getValidCapacityOptions(rooms) {
   }
 }
 
+//устанавливаем время заезда-выезда
+function setTimeOption(field, evt) {
+  field.value = evt.target.value;
+}
+
 //устанавливаем правильный плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
 priceInput.placeholder = MIN_ACCOMODATION_PRICES[typeInput.value];
 //устанавливаем валидное значение количества гостей при загрузке страницы
@@ -130,6 +139,13 @@ capacity.addEventListener('change', (evt) => {
 typeInput.addEventListener('change', (evt) => {
   priceInput.placeholder = MIN_ACCOMODATION_PRICES[evt.target.value];
   validatePrice();
+});
+
+timeIn.addEventListener('change', (evt) => {
+  setTimeOption(timeOut, evt);
+});
+timeOut.addEventListener('change', (evt) => {
+  setTimeOption(timeIn, evt);
 });
 
 export {deactivatePage, activatePage};
