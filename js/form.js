@@ -29,6 +29,9 @@ const ACCOMODATION_TYPE = {
   hotel: 'Отель',
 };
 
+const MAX_ROOM_NUMBER = 100;
+const MIN_CAPACITY = 0;
+
 function deactivatePage() {
   //добавляем стили неактивного состояния
   adForm.classList.add('ad-form--disabled');
@@ -77,9 +80,9 @@ function validatePrice() {
 function validateCapacity(guestsNumber, rooms) {
   if (guestsNumber > rooms) {
     capacity.setCustomValidity('Количество гостей не соотвествует количеству комнат.');
-  } else if (guestsNumber < rooms && rooms === 100 && guestsNumber !== 0) {
+  } else if (guestsNumber < rooms && rooms === MAX_ROOM_NUMBER && guestsNumber !== MIN_CAPACITY) {
     capacity.setCustomValidity('Слишком просторно.');
-  } else if (rooms !== 100 && guestsNumber === 0) {
+  } else if (rooms !== MAX_ROOM_NUMBER && guestsNumber === MIN_CAPACITY) {
     capacity.setCustomValidity('Количество гостей не соотвествует количеству комнат.');
   } else {
     capacity.setCustomValidity('');
@@ -90,17 +93,17 @@ function validateCapacity(guestsNumber, rooms) {
 
 //получаем валидный список вариантов размещения при заданном количестве комнат
 function getValidCapacityOptions(rooms) {
-  capacityOptions.forEach((option) => option.style.display = 'block');
-  if (rooms === 100) {
+  capacityOptions.forEach((option) => option.disabled = false);
+  if (rooms === MAX_ROOM_NUMBER) {
     capacityOptions.forEach((option) => {
-      if (Number(option.value) !== 0) {
-        option.style.display = 'none';
+      if (Number(option.value) !== MIN_CAPACITY) {
+        option.disabled = true;
       }
     });
   } else {
     capacityOptions.forEach((option) => {
-      if (rooms < Number(option.value) || Number(option.value) === 0) {
-        option.style.display = 'none';
+      if (rooms < Number(option.value) || Number(option.value) === MIN_CAPACITY) {
+        option.disabled = true;
       }
     });
   }
