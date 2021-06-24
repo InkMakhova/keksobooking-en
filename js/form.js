@@ -29,8 +29,6 @@ const ACCOMODATION_TYPE = {
   hotel: 'Отель',
 };
 
-priceInput.placeholder = MIN_ACCOMODATION_PRICES[typeInput.value];
-
 function deactivatePage() {
   //добавляем стили неактивного состояния
   adForm.classList.add('ad-form--disabled');
@@ -78,44 +76,46 @@ function validatePrice() {
 //валидация поля количества гостей
 function validateCapacity(guestsNumber, rooms) {
   if (guestsNumber > rooms) {
-    capacity.setCustomValidity('Количество гостей не соотвествует количеству комнат');
+    capacity.setCustomValidity('Количество гостей не соотвествует количеству комнат.');
   } else if (guestsNumber < rooms && rooms === 100 && guestsNumber !== 0) {
     capacity.setCustomValidity('Слишком просторно.');
-  } else if (guestsNumber === 0 && rooms === 100) {
-    capacity.setCustomValidity('');
-  } else if (guestsNumber <= rooms && guestsNumber !== 0) {
+  } else if (rooms !== 100 && guestsNumber === 0) {
+    capacity.setCustomValidity('Количество гостей не соотвествует количеству комнат.');
+  } else {
     capacity.setCustomValidity('');
   }
 
   capacity.reportValidity();
 }
 
-titleInput.addEventListener('input', validateTitle);
-titleInput.addEventListener('invalid', validateTitle);
-
-//изменение минимальной цены в placeholder в зависимости от выбора типа размещения
-typeInput.addEventListener('change', (evt) => {
-  priceInput.placeholder = MIN_ACCOMODATION_PRICES[evt.target.value];
-  validatePrice();
-});
-
-priceInput.addEventListener('input', validatePrice);
-
-roomNumber.addEventListener('change', (evt) => {
+//получаем валидный список вариантов размещения при заданном количестве комнат
+function getValidCapacityOptions(rooms) {
   capacityOptions.forEach((option) => option.style.display = 'block');
-  if (evt.target.value === '100') {
+  if (rooms === 100) {
     capacityOptions.forEach((option) => {
-      if (option.value !== '0') {
+      if (Number(option.value) !== 0) {
         option.style.display = 'none';
       }
     });
   } else {
     capacityOptions.forEach((option) => {
-      if (option.value > roomNumber.value || option.value === '0') {
+      if (rooms < Number(option.value) || Number(option.value) === 0) {
         option.style.display = 'none';
       }
     });
   }
+}
+
+//устанавливаем правильный плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
+priceInput.placeholder = MIN_ACCOMODATION_PRICES[typeInput.value];
+//устанавливаем валидное значение количества гостей при загрузке страницы
+getValidCapacityOptions(Number(roomNumber.value));
+
+titleInput.addEventListener('input', validateTitle);
+priceInput.addEventListener('input', validatePrice);
+
+roomNumber.addEventListener('change', (evt) => {
+  getValidCapacityOptions(Number(evt.target.value));
   validateCapacity(Number(capacity.value), Number(evt.target.value));
 });
 
@@ -123,11 +123,10 @@ capacity.addEventListener('change', (evt) => {
   validateCapacity(Number(evt.target.value), Number(roomNumber.value));
 });
 
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  validateCapacity(Number(capacity.value), Number(roomNumber.value));
+//изменение минимальной цены в placeholder в зависимости от выбора типа размещения
+typeInput.addEventListener('change', (evt) => {
+  priceInput.placeholder = MIN_ACCOMODATION_PRICES[evt.target.value];
   validatePrice();
-  adForm.submit();
 });
 
 export {deactivatePage, activatePage};
