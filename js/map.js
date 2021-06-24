@@ -15,7 +15,7 @@ const ACCOMODATION_TYPE = {
   hotel: 'Отель',
 };
 
-const isMapLoaded = false;
+const isMapLoaded = true;
 function activatePageStatus() {
   if (isMapLoaded) {
     return activatePage();
