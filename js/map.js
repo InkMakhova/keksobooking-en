@@ -117,4 +117,4 @@ function createCardsArray() {
   return cardsArray;
 }
 
-//activatePageStatus();
+createCardsArray();
