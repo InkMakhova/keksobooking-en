@@ -33,6 +33,7 @@ const MAX_ROOM_NUMBER = 100;
 const MIN_CAPACITY = 0;
 
 function deactivatePage() {
+  console.log('Деактивируюсь');
   //добавляем стили неактивного состояния
   adForm.classList.add('ad-form--disabled');
   mapFilters.classList.add('map__filters--disabled');
@@ -43,6 +44,7 @@ function deactivatePage() {
 }
 
 function activatePage() {
+  console.log('Aктивируюсь');
   //удаляем стили неактивного состояния
   adForm.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('map__filters--disabled');

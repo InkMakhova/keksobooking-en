@@ -15,13 +15,21 @@ const ACCOMODATION_TYPE = {
   hotel: 'Отель',
 };
 
-const isMapLoaded = true;
-function activatePageStatus() {
-  if (isMapLoaded) {
-    return activatePage();
-  }
-  return deactivatePage();
-}
+deactivatePage();
+
+const mapBox = L.map(mapCanvas)
+  .on('load', () => activatePage())
+  .setView({
+    lat: 35.68553153747553,
+    lng: 139.75276363268588,
+  }, 10);
+
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+).addTo(mapBox);
 
 function createCard(advert) {
   const card = cardTemplate.cloneNode(true);
@@ -80,5 +88,4 @@ function createCardsArray() {
   return cardsArray;
 }
 
-mapCanvas.append(createCardsArray()[0]);
-activatePageStatus();
+//activatePageStatus();
