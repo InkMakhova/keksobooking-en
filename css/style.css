@@ -771,14 +771,20 @@ fieldset {
 .popup {
   position: relative;
 
-  width: 250px;
+  width: 300px;
 
   font-size: 12px;
+}
+
+.popup__block {
+  display: flex;
+  justify-content: space-between;
 }
 
 .popup__avatar {
   display: block;
   margin-bottom: 10px;
+  margin-right: 25px;
   width: 35px;
   height: 35px;
 }

@@ -24,11 +24,11 @@ const MAIN_COORDINATES = {
 
 const ACCURACY = 5;
 
-addressInput.value = `${MAIN_COORDINATES.lat.toFixed(ACCURACY)}, ${MAIN_COORDINATES.lng.toFixed(ACCURACY)}`;
-
 const map = L.map(mapCanvas)
   .on('load', () => activatePage())
-  .setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], 10);
+  .setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], 12);
+
+const markerGroup = L.layerGroup().addTo(map);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -55,10 +55,11 @@ const mainPinMarker = L.marker(
 );
 
 mainPinMarker.addTo(map);
-
 mainPinMarker.on('moveend', (evt) => {
   addressInput.value = `${evt.target.getLatLng().lat.toFixed(ACCURACY)}, ${evt.target.getLatLng().lng.toFixed(ACCURACY)}`;
 });
+
+addressInput.value = `${MAIN_COORDINATES.lat.toFixed(ACCURACY)}, ${MAIN_COORDINATES.lng.toFixed(ACCURACY)}`;
 
 function createCard(advert) {
   const card = cardTemplate.cloneNode(true);
@@ -112,9 +113,35 @@ function createCard(advert) {
   return card;
 }
 
-function createCardsArray() {
-  const cardsArray = new Array(getAdvertsArray().length).fill(null).map((_element, index) => createCard(getAdvertsArray()[index]));
-  return cardsArray;
+function addBaloonsOnMap(adverts) {
+  adverts.forEach((element, index) => {
+    const {lat, lng} = element.location;
+
+    const icon = L.icon({
+      iconUrl: '../img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
+
+    const marker = L.marker(
+      {
+        lat,
+        lng,
+      },
+      {
+        icon,
+      },
+    );
+
+    marker
+      .addTo(markerGroup)
+      .bindPopup(
+        createCard(adverts[index]),
+        {
+          keepInView: true,
+        },
+      );
+  });
 }
 
-createCardsArray();
+addBaloonsOnMap(getAdvertsArray());
