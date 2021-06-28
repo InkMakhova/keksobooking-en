@@ -51,9 +51,9 @@ function getAdvertOffer(location) {
     guests: getRandomInteger(1, 20),
     checkin: CHECK_TIMES[getRandomInteger(0, CHECK_TIMES.length-1)],
     checkout: CHECK_TIMES[getRandomInteger(0, CHECK_TIMES.length-1)],
-    features: FEATURES.slice(0, getRandomInteger(0, FEATURES.length-1)),
+    features: FEATURES.slice(0, getRandomInteger(0, FEATURES.length)),
     description: 'Сосед — бас-гитарист группы, играет в составе своей группы с 20-00 до 03-00 за стенкой — в это время вы забудете о своем сне и получите великолепные впечатления от тяжелой музыки. Летом эти впечатления усилятся — открыты окна — больше музыки. В квартире снизу жильцы подыгрывают группе, громко стуча по батарее, они делают это уже 2-й год — безрезультатно. Если Вы — любитель хард-рока и спартанской обстановки — эта квартира по доступной цене для Вас',
-    photos: PHOTOS.slice(0, getRandomInteger(0, PHOTOS.length-1)),
+    photos: PHOTOS.slice(0, getRandomInteger(0, PHOTOS.length)),
   };
 }
 

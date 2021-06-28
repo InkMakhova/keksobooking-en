@@ -67,21 +67,59 @@ function setAddressValue(latitude, longitude) {
   addressInput.value = `${latitude.toFixed(ACCURACY)}, ${longitude.toFixed(ACCURACY)}`;
 }
 
+function setBlockVisibility(block, isNoData) {
+  if (isNoData) {
+    block.classList.add('hidden');
+  }
+}
+
 function createCard(advert) {
   const card = cardTemplate.cloneNode(true);
-  card.querySelector('.popup__title').textContent = advert.offer.title;
-  card.querySelector('.popup__text--address').textContent = advert.offer.address;
-  card.querySelector('.popup__text--price').textContent = `${String(advert.offer.price)} ₽/ночь`;
-  card.querySelector('.popup__type').textContent = ACCOMODATION_TYPE[advert.offer.type];
-  card.querySelector('.popup__text--capacity').textContent = `${String(advert.offer.rooms)} комнаты для ${String(advert.offer.guests)} гостей`;
-  card.querySelector('.popup__text--time').textContent = `Заезд после ${advert.offer.checkin}, выезд до ${advert.offer.checkout}`;
 
-  card.querySelector('.popup__avatar').src = advert.author.avatar;
-  if (advert.offer.description.length === 0) {
-    card.querySelector('.popup__description').style.display = 'none';
+  const title = card.querySelector('.popup__title');
+  setBlockVisibility(title, advert.offer.title.length === 0);
+  title.textContent = advert.offer.title;
+
+  const address = card.querySelector('.popup__text--address');
+  setBlockVisibility(address, advert.offer.address.length === 0);
+  address.textContent = advert.offer.address;
+
+  const price = card.querySelector('.popup__text--price');
+  setBlockVisibility(price, advert.offer.price.length === 0);
+  price.textContent = `${String(advert.offer.price)} ₽/ночь`;
+
+  const type = card.querySelector('.popup__type');
+  setBlockVisibility(type, advert.offer.type.length === 0);
+  type.textContent = ACCOMODATION_TYPE[advert.offer.type];
+
+  const capacity = card.querySelector('.popup__text--capacity');
+  setBlockVisibility(capacity, advert.offer.rooms.length === 0 && advert.offer.guests.length === 0);
+  if (advert.offer.rooms.length === 0 && advert.offer.guests.length !== 0) {
+    capacity.textContent = `Для ${String(advert.offer.guests)} гостей`;
+  } else if (advert.offer.rooms.length !== 0 && advert.offer.guests.length === 0) {
+    capacity.textContent = `${String(advert.offer.rooms)} комнаты`;
   } else {
-    card.querySelector('.popup__description').textContent = advert.offer.description;
+    capacity.textContent = `${String(advert.offer.rooms)} комнаты для ${String(advert.offer.guests)} гостей`;
   }
+
+  const time = card.querySelector('.popup__text--time');
+  setBlockVisibility(time, (advert.offer.checkin.length === 0 && advert.offer.checkout.length === 0) || (advert.offer.checkin.length === 0 && advert.offer.checkout.length !== 0));
+  if (advert.offer.checkout.length === 0) {
+    time.textContent = `Заезд после ${advert.offer.checkin}`;
+  } else {
+    time.textContent = `Заезд после ${advert.offer.checkin}, выезд до ${advert.offer.checkout}`;
+  }
+
+  const avatar = card.querySelector('.popup__avatar');
+  if (advert.author.avatar.length === 0) {
+    avatar.src = 'img/muffin-grey.svg';
+  } else {
+    avatar.src = advert.author.avatar;
+  }
+
+  const description = card.querySelector('.popup__description');
+  setBlockVisibility(description, advert.offer.description.length === 0);
+  description.textContent = advert.offer.description;
 
   const featuresList = card.querySelector('.popup__features');
   const photosList = card.querySelector('.popup__photos');
@@ -91,30 +129,19 @@ function createCard(advert) {
   photosList.innerHTML = '';
 
   //заполняет features данными
-  if (advert.offer.features.length === 0) {
-    featuresList.style.display = 'none';
-  } else {
-    advert.offer.features.forEach((element) => {
-      const feature = document.createElement('li');
-      feature.classList.add('popup__feature');
-      feature.classList.add(`popup__feature--${element}`);
-      featuresList.appendChild(feature);
-    });
-  }
+  setBlockVisibility(featuresList, advert.offer.features.length === 0);
+  advert.offer.features.forEach((element) => {
+    const feature = cardTemplate.querySelector(`.popup__feature--${element}`).cloneNode(true);
+    featuresList.appendChild(feature);
+  });
 
   //заполняет photos данными
-  if (advert.offer.photos.length === 0) {
-    photosList.style.display = 'none';
-  } else {
-    advert.offer.photos.forEach((element) => {
-      const photo = document.createElement('img');
-      photo.classList.add('popup__photo');
-      photo.width = '45';
-      photo.height = '40';
-      photo.src = element;
-      photosList.appendChild(photo);
-    });
-  }
+  setBlockVisibility(photosList, advert.offer.photos.length === 0);
+  advert.offer.photos.forEach((element) => {
+    const photo = cardTemplate.querySelector('.popup__photo').cloneNode(true);
+    photo.src = element;
+    photosList.appendChild(photo);
+  });
 
   return card;
 }
