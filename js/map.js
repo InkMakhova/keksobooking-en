@@ -23,20 +23,20 @@ const ICON_SIZES = {
   pinHeight: 40,
 };
 
+//деактивирует страницу при загрузке
+deactivatePage();
+
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
 
-deactivatePage();
-
 const map = L.map(mapCanvas)
   .on('load', () => activatePage())
   .setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], 12);
 
-const markerGroup = L.layerGroup().addTo(map);
-
+//инициализирует карту
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -61,12 +61,11 @@ const mainPinMarker = L.marker(
   },
 );
 
-mainPinMarker.addTo(map);
-mainPinMarker.on('moveend', (evt) => {
-  addressInput.value = `${evt.target.getLatLng().lat.toFixed(ACCURACY)}, ${evt.target.getLatLng().lng.toFixed(ACCURACY)}`;
-});
+const markerGroup = L.layerGroup().addTo(map);
 
-addressInput.value = `${MAIN_COORDINATES.lat.toFixed(ACCURACY)}, ${MAIN_COORDINATES.lng.toFixed(ACCURACY)}`;
+function setAddressValue(latitude, longitude) {
+  addressInput.value = `${latitude.toFixed(ACCURACY)}, ${longitude.toFixed(ACCURACY)}`;
+}
 
 function createCard(advert) {
   const card = cardTemplate.cloneNode(true);
@@ -91,7 +90,7 @@ function createCard(advert) {
   featuresList.innerHTML = '';
   photosList.innerHTML = '';
 
-  //заполнение features данными
+  //заполняет features данными
   if (advert.offer.features.length === 0) {
     featuresList.style.display = 'none';
   } else {
@@ -103,7 +102,7 @@ function createCard(advert) {
     });
   }
 
-  //заполнение photos данными
+  //заполняет photos данными
   if (advert.offer.photos.length === 0) {
     photosList.style.display = 'none';
   } else {
@@ -150,5 +149,12 @@ function addBaloonsOnMap(adverts) {
       );
   });
 }
+
+setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng);
+
+mainPinMarker.addTo(map);
+mainPinMarker.on('moveend', (evt) => {
+  setAddressValue(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
+});
 
 addBaloonsOnMap(getAdvertsArray());
