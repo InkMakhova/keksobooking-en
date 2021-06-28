@@ -1,14 +1,6 @@
 import {getAdvertsArray} from './data.js';
 import {deactivatePage, activatePage, addressInput} from './form.js';
 
-deactivatePage();
-
-const mapBox = document.querySelector('.map');
-const mapCanvas = mapBox.querySelector('#map-canvas');
-const cardTemplate = document.querySelector('#card')
-  .content
-  .querySelector('.popup');
-
 const ACCOMODATION_TYPE = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -23,6 +15,21 @@ const MAIN_COORDINATES = {
 };
 
 const ACCURACY = 5;
+
+const ICON_SIZES = {
+  mainPinWidth: 52,
+  mainPinHeight: 52,
+  pinWidth: 40,
+  pinHeight: 40,
+};
+
+const mapBox = document.querySelector('.map');
+const mapCanvas = mapBox.querySelector('#map-canvas');
+const cardTemplate = document.querySelector('#card')
+  .content
+  .querySelector('.popup');
+
+deactivatePage();
 
 const map = L.map(mapCanvas)
   .on('load', () => activatePage())
@@ -39,8 +46,8 @@ L.tileLayer(
 
 const mainPinIcon = L.icon({
   iconUrl: '/img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: [ICON_SIZES.mainPinWidth, ICON_SIZES.mainPinHeight],
+  iconAnchor: [ICON_SIZES.mainPinWidth / 2, ICON_SIZES.mainPinHeight],
 });
 
 const mainPinMarker = L.marker(
@@ -119,8 +126,8 @@ function addBaloonsOnMap(adverts) {
 
     const icon = L.icon({
       iconUrl: '/img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
+      iconSize: [ICON_SIZES.pinWidth, ICON_SIZES.pinHeight],
+      iconAnchor: [ICON_SIZES.pinWidth / 2, ICON_SIZES.pinHeight],
     });
 
     const marker = L.marker(
