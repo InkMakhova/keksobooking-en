@@ -45,7 +45,7 @@ L.tileLayer(
 ).addTo(map);
 
 const mainPinIcon = L.icon({
-  iconUrl: '/img/main-pin.svg',
+  iconUrl: 'img/main-pin.svg',
   iconSize: [ICON_SIZES.mainPinWidth, ICON_SIZES.mainPinHeight],
   iconAnchor: [ICON_SIZES.mainPinWidth / 2, ICON_SIZES.mainPinHeight],
 });
@@ -151,7 +151,7 @@ function addBaloonsOnMap(adverts) {
     const {lat, lng} = element.location;
 
     const icon = L.icon({
-      iconUrl: '/img/pin.svg',
+      iconUrl: 'img/pin.svg',
       iconSize: [ICON_SIZES.pinWidth, ICON_SIZES.pinHeight],
       iconAnchor: [ICON_SIZES.pinWidth / 2, ICON_SIZES.pinHeight],
     });
