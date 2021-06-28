@@ -7,15 +7,14 @@ const formFields = adForm.querySelectorAll('fieldset');
 const mapFilterFields = mapFilters.querySelectorAll('select');
 
 const titleInput = adForm.querySelector('#title');
+const addressInput = adForm.querySelector('#address');
 const priceInput = adForm.querySelector('#price');
 const typeInput = adForm.querySelector('#type');
 const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const capacityOptions = capacity.querySelectorAll('option');
 const timeIn = adForm.querySelector('#timein');
-const timeInOptions = timeIn.querySelectorAll('option');
 const timeOut = adForm.querySelector('#timeout');
-const timeOutOptions = timeOut.querySelectorAll('option');
 
 const MIN_ACCOMODATION_PRICES = {
   bungalow: 0,
@@ -148,4 +147,4 @@ timeOut.addEventListener('change', (evt) => {
   setTimeOption(timeIn, evt);
 });
 
-export {deactivatePage, activatePage};
+export {deactivatePage, activatePage, addressInput};

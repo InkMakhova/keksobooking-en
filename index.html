@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="leaflet/leaflet.css" crossorigin=""/>
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
 </head>
@@ -91,7 +92,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text" required>
+          <input id="address" name="address" type="text" required readonly>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -193,8 +194,10 @@
   <!-- Карточка объявления -->
   <template id="card">
     <article class="popup">
-      <img src="img/avatars/user01.png" class="popup__avatar" width="70" height="70" alt="Аватар пользователя">
-      <h3 class="popup__title">Уютное гнездышко для молодоженов</h3>
+      <div class="popup__block">
+        <img src="img/avatars/user01.png" class="popup__avatar" width="70" height="70" alt="Аватар пользователя">
+        <h3 class="popup__title">Уютное гнездышко для молодоженов</h3>
+      </div>
       <p class="popup__text popup__text--address">102-0082 Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3</p>
       <p class="popup__text popup__text--price">5200 <span>₽/ночь</span></p>
       <h4 class="popup__type">Квартира</h4>
@@ -230,6 +233,7 @@
     </div>
   </template>
 
+  <script src="leaflet/leaflet.js" crossorigin=""></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
