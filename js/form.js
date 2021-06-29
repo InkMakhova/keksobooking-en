@@ -147,4 +147,10 @@ timeOut.addEventListener('change', (evt) => {
   setTimeOption(timeIn, evt);
 });
 
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  const formData = new FormData(evt.target);
+});
+
 export {deactivatePage, activatePage, addressInput};
