@@ -77,48 +77,48 @@ function createCard(advert) {
   const card = cardTemplate.cloneNode(true);
 
   const title = card.querySelector('.popup__title');
-  setBlockVisibility(title, advert.offer.title.length === 0);
+  setBlockVisibility(title, advert.offer.title === 0);
   title.textContent = advert.offer.title;
 
   const address = card.querySelector('.popup__text--address');
-  setBlockVisibility(address, advert.offer.address.length === 0);
+  setBlockVisibility(address, advert.offer.address === 0);
   address.textContent = advert.offer.address;
 
   const price = card.querySelector('.popup__text--price');
-  setBlockVisibility(price, advert.offer.price.length === 0);
+  setBlockVisibility(price, advert.offer.price === 0);
   price.textContent = `${String(advert.offer.price)} ₽/ночь`;
 
   const type = card.querySelector('.popup__type');
-  setBlockVisibility(type, advert.offer.type.length === 0);
+  setBlockVisibility(type, advert.offer.type === 0);
   type.textContent = ACCOMODATION_TYPE[advert.offer.type];
 
   const capacity = card.querySelector('.popup__text--capacity');
-  setBlockVisibility(capacity, advert.offer.rooms.length === 0 && advert.offer.guests.length === 0);
-  if (advert.offer.rooms.length === 0 && advert.offer.guests.length !== 0) {
+  setBlockVisibility(capacity, advert.offer.rooms === 0 && advert.offer.guests === 0);
+  if (advert.offer.rooms === 0 && advert.offer.guests !== 0) {
     capacity.textContent = `Для ${String(advert.offer.guests)} гостей`;
-  } else if (advert.offer.rooms.length !== 0 && advert.offer.guests.length === 0) {
+  } else if (advert.offer.rooms !== 0 && advert.offer.guests === 0) {
     capacity.textContent = `${String(advert.offer.rooms)} комнаты`;
   } else {
     capacity.textContent = `${String(advert.offer.rooms)} комнаты для ${String(advert.offer.guests)} гостей`;
   }
 
   const time = card.querySelector('.popup__text--time');
-  setBlockVisibility(time, (advert.offer.checkin.length === 0 && advert.offer.checkout.length === 0) || (advert.offer.checkin.length === 0 && advert.offer.checkout.length !== 0));
-  if (advert.offer.checkout.length === 0) {
+  setBlockVisibility(time, (advert.offer.checkin === 0 && advert.offer.checkout === 0) || (advert.offer.checkin === 0 && advert.offer.checkout !== 0));
+  if (advert.offer.checkout === 0) {
     time.textContent = `Заезд после ${advert.offer.checkin}`;
   } else {
     time.textContent = `Заезд после ${advert.offer.checkin}, выезд до ${advert.offer.checkout}`;
   }
 
   const avatar = card.querySelector('.popup__avatar');
-  if (advert.author.avatar.length === 0) {
+  if (advert.author.avatar === 0) {
     avatar.src = 'img/muffin-grey.svg';
   } else {
     avatar.src = advert.author.avatar;
   }
 
   const description = card.querySelector('.popup__description');
-  setBlockVisibility(description, advert.offer.description.length === 0);
+  setBlockVisibility(description, advert.offer.description === 0);
   description.textContent = advert.offer.description;
 
   const featuresList = card.querySelector('.popup__features');
@@ -129,14 +129,14 @@ function createCard(advert) {
   photosList.innerHTML = '';
 
   //заполняет features данными
-  setBlockVisibility(featuresList, advert.offer.features.length === 0);
+  setBlockVisibility(featuresList, advert.offer.features === 0);
   advert.offer.features.forEach((element) => {
     const feature = cardTemplate.querySelector(`.popup__feature--${element}`).cloneNode(true);
     featuresList.appendChild(feature);
   });
 
   //заполняет photos данными
-  setBlockVisibility(photosList, advert.offer.photos.length === 0);
+  setBlockVisibility(photosList, advert.offer.photos === 0);
   advert.offer.photos.forEach((element) => {
     const photo = cardTemplate.querySelector('.popup__photo').cloneNode(true);
     photo.src = element;
