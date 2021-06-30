@@ -1,4 +1,6 @@
 import {setDisabledAttribute} from './util.js';
+import {MAIN_COORDINATES, setAddressValue} from './map.js';
+import {TYPES, CHECK_TIMES} from './data.js';
 
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
@@ -15,6 +17,8 @@ const capacity = adForm.querySelector('#capacity');
 const capacityOptions = capacity.querySelectorAll('option');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
+
+const resetButton = adForm.querySelector('.ad-form__reset');
 
 const MIN_ACCOMODATION_PRICES = {
   bungalow: 0,
@@ -117,6 +121,17 @@ function setTimeOption(field, evt) {
   field.value = evt.target.value;
 }
 
+function resetForm() {
+  titleInput.value = '';
+  setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng);
+  typeInput.value = TYPES[1];
+  priceInput.value = '';
+  roomNumber.value = '1';
+  capacity.value = '1';
+  timeIn.value = CHECK_TIMES[0];
+  timeOut.value = CHECK_TIMES[0];
+}
+
 //устанавливаем правильный плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
 priceInput.placeholder = MIN_ACCOMODATION_PRICES[typeInput.value];
 //устанавливаем валидное значение количества гостей при загрузке страницы
@@ -147,10 +162,20 @@ timeOut.addEventListener('change', (evt) => {
   setTimeOption(timeIn, evt);
 });
 
+resetButton.addEventListener('click', resetForm);
+
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   const formData = new FormData(evt.target);
+
+  fetch(
+    'https://23.javascript.pages.academy/keksobooking/data',
+    {
+      method: 'POST',
+      body: formData,
+    },
+  );
 });
 
 export {deactivatePage, activatePage, addressInput};

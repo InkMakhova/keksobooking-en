@@ -185,3 +185,5 @@ mainPinMarker.on('moveend', (evt) => {
 });
 
 addBaloonsOnMap(getAdvertsArray());
+
+export {MAIN_COORDINATES, setAddressValue};

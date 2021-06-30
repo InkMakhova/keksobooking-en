@@ -78,4 +78,4 @@ function getAdvertsArray() {
   return ADVERTS;
 }
 
-export {getAdvertsArray};
+export {TYPES, CHECK_TIMES, getAdvertsArray};
