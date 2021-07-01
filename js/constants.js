@@ -33,6 +33,15 @@ const CHECK_TIMES = [
   '14:00',
 ];
 
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
+
 const ICON_SIZES = {
   mainPinWidth: 52,
   mainPinHeight: 52,
@@ -49,4 +58,16 @@ const ACCURACY = 5;
 
 const DEFAULT_AVATAR = 'img/muffin-grey.svg';
 
-export {ADVERTS_NUMBER, TYPES, ACCOMODATION_TYPE, MIN_ACCOMODATION_PRICES, MAX_ROOM_NUMBER, MIN_CAPACITY, CHECK_TIMES, ICON_SIZES, MAIN_COORDINATES, ACCURACY, DEFAULT_AVATAR};
+export {
+  ADVERTS_NUMBER,
+  TYPES,
+  ACCOMODATION_TYPE,
+  MIN_ACCOMODATION_PRICES,
+  MAX_ROOM_NUMBER,
+  MIN_CAPACITY,
+  CHECK_TIMES,
+  ICON_SIZES,
+  MAIN_COORDINATES,
+  ACCURACY,
+  DEFAULT_AVATAR
+};

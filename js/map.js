@@ -1,9 +1,7 @@
 import {ACCOMODATION_TYPE, ICON_SIZES, MAIN_COORDINATES, ACCURACY} from './constants.js';
 import {setBlockVisibility} from './util.js';
-import {deactivatePage, activatePage, setAddressValue, mapFilterFields, mapFeaturesFilters} from './form.js';
-
-//деактивирует страницу при загрузке
-deactivatePage();
+import {setAddressValue, mapFilterFields, mapFeaturesFilters} from './form.js';
+import {activatePage} from './page.js';
 
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');
@@ -17,7 +15,7 @@ const dataErrorMessageTemplate = document.querySelector('#data-error')
   .querySelector('.data-error');
 
 const map = L.map(mapCanvas)
-  .on('load', () => activatePage())
+  .on('load', () => {activatePage(); console.log(2);})
   .setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], 12);
 
 //инициализирует карту
@@ -174,5 +172,9 @@ mainPinMarker.on('moveend', (evt) => {
   setAddressValue(evt.target.getLatLng().lat, evt.target.getLatLng().lng, ACCURACY);
 });
 
-export {showDataErrorMessage, resetMap, addBaloonsOnMap};
+export {
+  showDataErrorMessage,
+  resetMap,
+  addBaloonsOnMap
+};
 

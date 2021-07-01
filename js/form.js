@@ -1,5 +1,15 @@
-import {setDisabledAttribute, isEscEvent} from './util.js';
-import {TYPES, ACCOMODATION_TYPE, MIN_ACCOMODATION_PRICES, MAX_ROOM_NUMBER, MIN_CAPACITY, CHECK_TIMES, MAIN_COORDINATES, ACCURACY, DEFAULT_AVATAR} from './constants.js';
+import {isEscEvent} from './util.js';
+import {
+  TYPES,
+  ACCOMODATION_TYPE,
+  MIN_ACCOMODATION_PRICES,
+  MAX_ROOM_NUMBER,
+  MIN_CAPACITY,
+  CHECK_TIMES,
+  MAIN_COORDINATES,
+  ACCURACY,
+  DEFAULT_AVATAR
+} from './constants.js';
 import {resetMap} from './map.js';
 import {sendData} from './api.js';
 
@@ -42,26 +52,6 @@ adForm.insertAdjacentElement('beforeend', errorMessage);
 
 successMessage.hidden = true;
 errorMessage.hidden = true;
-
-function deactivatePage() {
-  //добавляет стили неактивного состояния
-  adForm.classList.add('ad-form--disabled');
-  mapFilters.classList.add('map__filters--disabled');
-
-  //делает поля формы и фильтры карты неактивными
-  setDisabledAttribute(formFields, true);
-  setDisabledAttribute(mapFilterFields, true);
-}
-
-function activatePage() {
-  //удаляет стили неактивного состояния
-  adForm.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map__filters--disabled');
-
-  //делает поля формы и фильтры карты активными
-  setDisabledAttribute(formFields, false);
-  setDisabledAttribute(mapFilterFields, false);
-}
 
 //устанавливает значение адреса
 function setAddressValue(latitude, longitude, accuracy) {
@@ -236,4 +226,13 @@ adForm.addEventListener('reset', (evt) => {
   resetForm();
 });
 
-export {deactivatePage, activatePage, setAddressValue, mapFilterFields, mapFeaturesFilters, setUserFormSubmit, reportDataSentSuccess};
+export {
+  adForm,
+  formFields,
+  mapFilters,
+  mapFilterFields,
+  mapFeaturesFilters,
+  setAddressValue,
+  setUserFormSubmit,
+  reportDataSentSuccess
+};
