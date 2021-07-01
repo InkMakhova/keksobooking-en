@@ -1,13 +1,6 @@
-import {ACCOMODATION_TYPE, MAIN_COORDINATES, ACCURACY} from './constants.js';
+import {ACCOMODATION_TYPE, ICON_SIZES, MAIN_COORDINATES, ACCURACY} from './constants.js';
 import {setBlockVisibility} from './util.js';
 import {deactivatePage, activatePage, setAddressValue, mapFilterFields, mapFeaturesFilters} from './form.js';
-
-const ICON_SIZES = {
-  mainPinWidth: 52,
-  mainPinHeight: 52,
-  pinWidth: 40,
-  pinHeight: 40,
-};
 
 //деактивирует страницу при загрузке
 deactivatePage();
