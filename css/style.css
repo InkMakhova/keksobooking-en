@@ -951,6 +951,24 @@ fieldset {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.data-error {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+
+  box-sizing: border-box;
+  width: 100%;
+
+  overflow: auto;
+  padding: 10px;
+
+  text-align: center;
+  vertical-align: middle;
+
+  background-color: rgba(245, 0, 0, 0.7);
+}
+
 .success__message,
 .error__message {
   position: relative;
@@ -958,6 +976,13 @@ fieldset {
   color: #ffffff;
   font-size: 50px;
   font-weight: 700;
+}
+
+.data-error__message {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
 }
 
 .success__message::before,

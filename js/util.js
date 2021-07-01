@@ -29,4 +29,12 @@ function setDisabledAttribute(fields, isDisabled) {
   fields.forEach((field) => field.disabled = isDisabled);
 }
 
-export {getRandomInteger, getRandomFloat, setDisabledAttribute};
+function setBlockVisibility(block, isNoData) {
+  if (isNoData) {
+    block.classList.add('hidden');
+  }
+}
+
+const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
+export {getRandomInteger, getRandomFloat, setDisabledAttribute, setBlockVisibility, isEscEvent};

@@ -1,13 +1,16 @@
-import {setDisabledAttribute} from './util.js';
-import {MAIN_COORDINATES, setAddressValue} from './map.js';
-import {TYPES, CHECK_TIMES} from './data.js';
+import {setDisabledAttribute, isEscEvent} from './util.js';
+import {TYPES, ACCOMODATION_TYPE, MIN_ACCOMODATION_PRICES, MAX_ROOM_NUMBER, MIN_CAPACITY, CHECK_TIMES, MAIN_COORDINATES, ACCURACY, DEFAULT_AVATAR} from './constants.js';
+import {resetMap} from './map.js';
+import {sendData} from './api.js';
 
 const adForm = document.querySelector('.ad-form');
-const mapFilters = document.querySelector('.map__filters');
-
 const formFields = adForm.querySelectorAll('fieldset');
-const mapFilterFields = mapFilters.querySelectorAll('select');
 
+const mapFilters = document.querySelector('.map__filters');
+const mapFilterFields = mapFilters.querySelectorAll('select');
+const mapFeaturesFilters = mapFilters.querySelector('#housing-features').querySelectorAll('.map__checkbox');
+
+const avatarImage = adForm.querySelector('.ad-form-header__preview').querySelector('img');
 const titleInput = adForm.querySelector('#title');
 const addressInput = adForm.querySelector('#address');
 const priceInput = adForm.querySelector('#price');
@@ -17,46 +20,52 @@ const capacity = adForm.querySelector('#capacity');
 const capacityOptions = capacity.querySelectorAll('option');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
+const descriptionInput = adForm.querySelector('#description');
+const featuresFielset = adForm.querySelector('.features');
+const featuresOptions = featuresFielset.querySelectorAll('.features__checkbox');
+const uplodedPhotos = adForm.querySelectorAll('.ad-form__photo');
 
-const resetButton = adForm.querySelector('.ad-form__reset');
+const successMessage = document.querySelector('#success')
+  .content
+  .querySelector('.success')
+  .cloneNode(true);
 
-const MIN_ACCOMODATION_PRICES = {
-  bungalow: 0,
-  flat: 1000,
-  hotel: 3000,
-  house: 5000,
-  palace: 10000,
-};
+const errorMessage = document.querySelector('#error')
+  .content
+  .querySelector('.error')
+  .cloneNode(true);
 
-const ACCOMODATION_TYPE = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
-};
+const closeButtonError = errorMessage.querySelector('.error__button');
 
-const MAX_ROOM_NUMBER = 100;
-const MIN_CAPACITY = 0;
+adForm.insertAdjacentElement('beforeend', successMessage);
+adForm.insertAdjacentElement('beforeend', errorMessage);
+
+successMessage.hidden = true;
+errorMessage.hidden = true;
 
 function deactivatePage() {
-  //добавляем стили неактивного состояния
+  //добавляет стили неактивного состояния
   adForm.classList.add('ad-form--disabled');
   mapFilters.classList.add('map__filters--disabled');
 
-  //делаем поля формы и фильтры карты неактивными
+  //делает поля формы и фильтры карты неактивными
   setDisabledAttribute(formFields, true);
   setDisabledAttribute(mapFilterFields, true);
 }
 
 function activatePage() {
-  //удаляем стили неактивного состояния
+  //удаляет стили неактивного состояния
   adForm.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('map__filters--disabled');
 
-  //делаем поля формы и фильтры карты активными
+  //делает поля формы и фильтры карты активными
   setDisabledAttribute(formFields, false);
   setDisabledAttribute(mapFilterFields, false);
+}
+
+//устанавливает значение адреса
+function setAddressValue(latitude, longitude, accuracy) {
+  addressInput.value = `${latitude.toFixed(accuracy)}, ${longitude.toFixed(accuracy)}`;
 }
 
 //валидация заголовка объявления
@@ -98,7 +107,7 @@ function validateCapacity(guestsNumber, rooms) {
   capacity.reportValidity();
 }
 
-//получаем валидный список вариантов размещения при заданном количестве комнат
+//получает валидный список вариантов размещения при заданном количестве комнат
 function getValidCapacityOptions(rooms) {
   capacityOptions.forEach((option) => option.disabled = false);
   if (rooms === MAX_ROOM_NUMBER) {
@@ -116,25 +125,69 @@ function getValidCapacityOptions(rooms) {
   }
 }
 
-//устанавливаем время заезда-выезда
+//устанавливает время заезда-выезда
 function setTimeOption(field, evt) {
   field.value = evt.target.value;
 }
 
+//сбрасывает поля формы
 function resetForm() {
+  avatarImage.src = DEFAULT_AVATAR;
   titleInput.value = '';
-  setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng);
+  setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng, ACCURACY);
   typeInput.value = TYPES[1];
   priceInput.value = '';
+  priceInput.placeholder = MIN_ACCOMODATION_PRICES[TYPES[1]];
   roomNumber.value = '1';
   capacity.value = '1';
   timeIn.value = CHECK_TIMES[0];
   timeOut.value = CHECK_TIMES[0];
+  descriptionInput.value = '';
+  featuresOptions.forEach((option) => option.checked = false);
+  uplodedPhotos.forEach((photo) => photo.remove());
 }
 
-//устанавливаем правильный плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
+function closeSuccessMessage() {
+  successMessage.hidden = true;
+  document.removeEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      closeSuccessMessage();
+    }
+  });
+  successMessage.removeEventListener('mousedown', closeSuccessMessage);
+}
+
+function showSuccessMessage() {
+  successMessage.hidden = false;
+  document.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      closeSuccessMessage();
+    }
+  });
+  successMessage.addEventListener('mousedown', closeSuccessMessage);
+}
+
+function closeErrorMessage() {
+  errorMessage.hidden = true;
+  closeButtonError.removeEventListener('click', closeErrorMessage);
+  errorMessage.removeEventListener('mousedown', closeErrorMessage);
+}
+
+function showErrorMessage() {
+  errorMessage.hidden = false;
+  closeButtonError.addEventListener('click', closeErrorMessage);
+  errorMessage.addEventListener('mousedown', closeErrorMessage);
+}
+
+function reportDataSentSuccess() {
+  showSuccessMessage();
+  resetForm();
+  resetMap();
+}
+
+//устанавливает плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
 priceInput.placeholder = MIN_ACCOMODATION_PRICES[typeInput.value];
-//устанавливаем валидное значение количества гостей при загрузке страницы
+//устанавливает валидное значение количества гостей при загрузке страницы
 getValidCapacityOptions(Number(roomNumber.value));
 
 titleInput.addEventListener('input', validateTitle);
@@ -155,6 +208,7 @@ typeInput.addEventListener('change', (evt) => {
   validatePrice();
 });
 
+//изменение времени выезда/заезда взаимозависимо
 timeIn.addEventListener('change', (evt) => {
   setTimeOption(timeOut, evt);
 });
@@ -162,20 +216,24 @@ timeOut.addEventListener('change', (evt) => {
   setTimeOption(timeIn, evt);
 });
 
-resetButton.addEventListener('click', resetForm);
+//отправка формы
+const setUserFormSubmit = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-adForm.addEventListener('submit', (evt) => {
+    sendData(
+      () => onSuccess(),
+      () => showErrorMessage(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+//очистка формы
+adForm.addEventListener('reset', (evt) => {
   evt.preventDefault();
-
-  const formData = new FormData(evt.target);
-
-  fetch(
-    'https://23.javascript.pages.academy/keksobooking/data',
-    {
-      method: 'POST',
-      body: formData,
-    },
-  );
+  resetMap();
+  resetForm();
 });
 
-export {deactivatePage, activatePage, addressInput};
+export {deactivatePage, activatePage, setAddressValue, mapFilterFields, mapFeaturesFilters, setUserFormSubmit, reportDataSentSuccess};

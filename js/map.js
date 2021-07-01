@@ -1,20 +1,6 @@
-import {getAdvertsArray} from './data.js';
-import {deactivatePage, activatePage, addressInput} from './form.js';
-
-const ACCOMODATION_TYPE = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
-};
-
-const MAIN_COORDINATES = {
-  lat: 35.68553153747553,
-  lng: 139.75276363268588,
-};
-
-const ACCURACY = 5;
+import {ACCOMODATION_TYPE, MAIN_COORDINATES, ACCURACY} from './constants.js';
+import {setBlockVisibility} from './util.js';
+import {deactivatePage, activatePage, setAddressValue, mapFilterFields, mapFeaturesFilters} from './form.js';
 
 const ICON_SIZES = {
   mainPinWidth: 52,
@@ -28,9 +14,14 @@ deactivatePage();
 
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');
+
 const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
+
+const dataErrorMessageTemplate = document.querySelector('#data-error')
+  .content
+  .querySelector('.data-error');
 
 const map = L.map(mapCanvas)
   .on('load', () => activatePage())
@@ -63,14 +54,9 @@ const mainPinMarker = L.marker(
 
 const markerGroup = L.layerGroup().addTo(map);
 
-function setAddressValue(latitude, longitude) {
-  addressInput.value = `${latitude.toFixed(ACCURACY)}, ${longitude.toFixed(ACCURACY)}`;
-}
-
-function setBlockVisibility(block, isNoData) {
-  if (isNoData) {
-    block.classList.add('hidden');
-  }
+function showDataErrorMessage() {
+  const dataErrorMessage = dataErrorMessageTemplate.cloneNode(true);
+  mapCanvas.insertAdjacentElement('beforeend', dataErrorMessage);
 }
 
 function createCard(advert) {
@@ -129,19 +115,23 @@ function createCard(advert) {
   photosList.innerHTML = '';
 
   //заполняет features данными
-  setBlockVisibility(featuresList, advert.offer.features === 0);
-  advert.offer.features.forEach((element) => {
-    const feature = cardTemplate.querySelector(`.popup__feature--${element}`).cloneNode(true);
-    featuresList.appendChild(feature);
-  });
+  setBlockVisibility(featuresList, advert.offer.features === null);
+  if (advert.offer.features) {
+    advert.offer.features.forEach((element) => {
+      const feature = cardTemplate.querySelector(`.popup__feature--${element}`).cloneNode(true);
+      featuresList.appendChild(feature);
+    });
+  }
 
   //заполняет photos данными
   setBlockVisibility(photosList, advert.offer.photos === 0);
-  advert.offer.photos.forEach((element) => {
-    const photo = cardTemplate.querySelector('.popup__photo').cloneNode(true);
-    photo.src = element;
-    photosList.appendChild(photo);
-  });
+  if (advert.offer.photos) {
+    advert.offer.photos.forEach((element) => {
+      const photo = cardTemplate.querySelector('.popup__photo').cloneNode(true);
+      photo.src = element;
+      photosList.appendChild(photo);
+    });
+  }
 
   return card;
 }
@@ -177,13 +167,19 @@ function addBaloonsOnMap(adverts) {
   });
 }
 
-setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng);
+//сбрасывает фильтры карты
+function resetMap() {
+  mainPinMarker.setLatLng(L.latLng(MAIN_COORDINATES.lat.toFixed(ACCURACY), MAIN_COORDINATES.lng.toFixed(ACCURACY)));
+  mapFilterFields.forEach((field) => field.value = 'any');
+  mapFeaturesFilters.forEach((filter) => filter.checked = false);
+}
+
+setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng, ACCURACY);
 
 mainPinMarker.addTo(map);
 mainPinMarker.on('moveend', (evt) => {
-  setAddressValue(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
+  setAddressValue(evt.target.getLatLng().lat, evt.target.getLatLng().lng, ACCURACY);
 });
 
-addBaloonsOnMap(getAdvertsArray());
+export {showDataErrorMessage, resetMap, addBaloonsOnMap};
 
-export {MAIN_COORDINATES, setAddressValue};
