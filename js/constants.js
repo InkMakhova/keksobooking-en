@@ -33,15 +33,6 @@ const CHECK_TIMES = [
   '14:00',
 ];
 
-const FEATURES = [
-  'wifi',
-  'dishwasher',
-  'parking',
-  'washer',
-  'elevator',
-  'conditioner',
-];
-
 const ICON_SIZES = {
   mainPinWidth: 52,
   mainPinHeight: 52,
@@ -56,6 +47,8 @@ const MAIN_COORDINATES = {
 
 const ACCURACY = 5;
 
+const ZOOM = 12;
+
 const DEFAULT_AVATAR = 'img/muffin-grey.svg';
 
 export {
@@ -69,5 +62,6 @@ export {
   ICON_SIZES,
   MAIN_COORDINATES,
   ACCURACY,
+  ZOOM,
   DEFAULT_AVATAR
 };

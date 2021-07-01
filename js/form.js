@@ -12,13 +12,20 @@ import {
 } from './constants.js';
 import {resetMap} from './map.js';
 import {sendData} from './api.js';
+import {
+  adForm,
+  formFields,
+  mapFilters,
+  mapFilterFields,
+  mapFeaturesFilters
+} from './page.js';
 
-const adForm = document.querySelector('.ad-form');
+/*const adForm = document.querySelector('.ad-form');
 const formFields = adForm.querySelectorAll('fieldset');
 
 const mapFilters = document.querySelector('.map__filters');
 const mapFilterFields = mapFilters.querySelectorAll('select');
-const mapFeaturesFilters = mapFilters.querySelector('#housing-features').querySelectorAll('.map__checkbox');
+const mapFeaturesFilters = mapFilters.querySelector('#housing-features').querySelectorAll('.map__checkbox');*/
 
 const avatarImage = adForm.querySelector('.ad-form-header__preview').querySelector('img');
 const titleInput = adForm.querySelector('#title');
@@ -54,12 +61,12 @@ successMessage.hidden = true;
 errorMessage.hidden = true;
 
 //устанавливает значение адреса
-function setAddressValue(latitude, longitude, accuracy) {
+const setAddressValue = (latitude, longitude, accuracy) => {
   addressInput.value = `${latitude.toFixed(accuracy)}, ${longitude.toFixed(accuracy)}`;
-}
+};
 
 //валидация заголовка объявления
-function validateTitle() {
+const validateTitle = () => {
   if (titleInput.validity.valueMissing) {
     titleInput.setCustomValidity('Обязательное поле для заполнения');
   } else if (!titleInput.validity.valueMissing && titleInput.value.length < titleInput.minLength) {
@@ -67,10 +74,10 @@ function validateTitle() {
   } else {
     titleInput.setCustomValidity('');
   }
-}
+};
 
 //валидация поля цены
-function validatePrice() {
+const validatePrice = () => {
   if (Number(priceInput.value) < MIN_ACCOMODATION_PRICES[typeInput.value]) {
     priceInput.setCustomValidity(`Минимальная цена за тип размещения ${ACCOMODATION_TYPE[typeInput.value]} - ${MIN_ACCOMODATION_PRICES[typeInput.value]} руб.`);
   } else if (Number(priceInput.value) > Number(priceInput.max)) {
@@ -80,10 +87,10 @@ function validatePrice() {
   }
 
   priceInput.reportValidity();
-}
+};
 
 //валидация поля количества гостей
-function validateCapacity(guestsNumber, rooms) {
+const validateCapacity = (guestsNumber, rooms) => {
   if (guestsNumber > rooms) {
     capacity.setCustomValidity('Количество гостей не соотвествует количеству комнат.');
   } else if (guestsNumber < rooms && rooms === MAX_ROOM_NUMBER && guestsNumber !== MIN_CAPACITY) {
@@ -95,10 +102,10 @@ function validateCapacity(guestsNumber, rooms) {
   }
 
   capacity.reportValidity();
-}
+};
 
 //получает валидный список вариантов размещения при заданном количестве комнат
-function getValidCapacityOptions(rooms) {
+const getValidCapacityOptions = (rooms) => {
   capacityOptions.forEach((option) => option.disabled = false);
   if (rooms === MAX_ROOM_NUMBER) {
     capacityOptions.forEach((option) => {
@@ -113,15 +120,15 @@ function getValidCapacityOptions(rooms) {
       }
     });
   }
-}
+};
 
 //устанавливает время заезда-выезда
-function setTimeOption(field, evt) {
+const setTimeOption = (field, evt) => {
   field.value = evt.target.value;
-}
+};
 
 //сбрасывает поля формы
-function resetForm() {
+const resetForm = () => {
   avatarImage.src = DEFAULT_AVATAR;
   titleInput.value = '';
   setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng, ACCURACY);
@@ -135,9 +142,9 @@ function resetForm() {
   descriptionInput.value = '';
   featuresOptions.forEach((option) => option.checked = false);
   uplodedPhotos.forEach((photo) => photo.remove());
-}
+};
 
-function closeSuccessMessage() {
+const closeSuccessMessage = () => {
   successMessage.hidden = true;
   document.removeEventListener('keydown', (evt) => {
     if (isEscEvent(evt)) {
@@ -145,9 +152,9 @@ function closeSuccessMessage() {
     }
   });
   successMessage.removeEventListener('mousedown', closeSuccessMessage);
-}
+};
 
-function showSuccessMessage() {
+const showSuccessMessage = () => {
   successMessage.hidden = false;
   document.addEventListener('keydown', (evt) => {
     if (isEscEvent(evt)) {
@@ -155,25 +162,25 @@ function showSuccessMessage() {
     }
   });
   successMessage.addEventListener('mousedown', closeSuccessMessage);
-}
+};
 
-function closeErrorMessage() {
+const closeErrorMessage = () => {
   errorMessage.hidden = true;
   closeButtonError.removeEventListener('click', closeErrorMessage);
   errorMessage.removeEventListener('mousedown', closeErrorMessage);
-}
+};
 
-function showErrorMessage() {
+const showErrorMessage = () => {
   errorMessage.hidden = false;
   closeButtonError.addEventListener('click', closeErrorMessage);
   errorMessage.addEventListener('mousedown', closeErrorMessage);
-}
+};
 
-function reportDataSentSuccess() {
+const reportDataSentSuccess = () => {
   showSuccessMessage();
   resetForm();
   resetMap();
-}
+};
 
 //устанавливает плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
 priceInput.placeholder = MIN_ACCOMODATION_PRICES[typeInput.value];

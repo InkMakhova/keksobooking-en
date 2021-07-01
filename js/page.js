@@ -1,13 +1,20 @@
 import {setDisabledAttribute} from './util.js';
-import {
+/*import {
   adForm,
   formFields,
   mapFilters,
   mapFilterFields,
   mapFeaturesFilters
-} from './form.js';
+} from './form.js';*/
 
-function deactivatePage() {
+const adForm = document.querySelector('.ad-form');
+const formFields = adForm.querySelectorAll('fieldset');
+
+const mapFilters = document.querySelector('.map__filters');
+const mapFilterFields = mapFilters.querySelectorAll('select');
+const mapFeaturesFilters = mapFilters.querySelector('#housing-features').querySelectorAll('.map__checkbox');
+
+const deactivatePage = () => {
   //добавляет стили неактивного состояния
   adForm.classList.add('ad-form--disabled');
   mapFilters.classList.add('map__filters--disabled');
@@ -16,9 +23,11 @@ function deactivatePage() {
   setDisabledAttribute(formFields, true);
   setDisabledAttribute(mapFilterFields, true);
   setDisabledAttribute(mapFeaturesFilters, true);
-}
 
-function activatePage() {
+  console.log('1');
+};
+
+const activatePage = () => {
   //удаляет стили неактивного состояния
   adForm.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('map__filters--disabled');
@@ -27,9 +36,14 @@ function activatePage() {
   setDisabledAttribute(formFields, false);
   setDisabledAttribute(mapFilterFields, false);
   setDisabledAttribute(mapFeaturesFilters, false);
-}
+};
 
 export {
+  adForm,
+  formFields,
+  mapFilters,
+  mapFilterFields,
+  mapFeaturesFilters,
   deactivatePage,
   activatePage
 };

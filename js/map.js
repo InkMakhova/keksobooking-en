@@ -1,7 +1,7 @@
-import {ACCOMODATION_TYPE, ICON_SIZES, MAIN_COORDINATES, ACCURACY} from './constants.js';
+import {ACCOMODATION_TYPE, ICON_SIZES, MAIN_COORDINATES, ACCURACY, ZOOM} from './constants.js';
 import {setBlockVisibility} from './util.js';
-import {setAddressValue, mapFilterFields, mapFeaturesFilters} from './form.js';
 import {activatePage} from './page.js';
+import {setAddressValue, mapFilterFields, mapFeaturesFilters} from './form.js';
 
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');
@@ -14,17 +14,21 @@ const dataErrorMessageTemplate = document.querySelector('#data-error')
   .content
   .querySelector('.data-error');
 
-const map = L.map(mapCanvas)
-  .on('load', () => {activatePage(); console.log(2);})
-  .setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], 12);
+const map = L.map(mapCanvas);
 
-//инициализирует карту
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
+const initMap = () => {
+  map
+    .on('load', () => activatePage())
+    .setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], ZOOM);
+
+  //инициализирует карту
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+};
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
@@ -45,12 +49,12 @@ const mainPinMarker = L.marker(
 
 const markerGroup = L.layerGroup().addTo(map);
 
-function showDataErrorMessage() {
+const showDataErrorMessage = () => {
   const dataErrorMessage = dataErrorMessageTemplate.cloneNode(true);
   mapCanvas.insertAdjacentElement('beforeend', dataErrorMessage);
-}
+};
 
-function createCard(advert) {
+const createCard = (advert) => {
   const card = cardTemplate.cloneNode(true);
 
   const title = card.querySelector('.popup__title');
@@ -125,9 +129,9 @@ function createCard(advert) {
   }
 
   return card;
-}
+};
 
-function addBaloonsOnMap(adverts) {
+const addBaloonsOnMap = (adverts) => {
   adverts.forEach((element, index) => {
     const {lat, lng} = element.location;
 
@@ -156,14 +160,14 @@ function addBaloonsOnMap(adverts) {
         },
       );
   });
-}
+};
 
 //сбрасывает фильтры карты
-function resetMap() {
+const resetMap = () => {
   mainPinMarker.setLatLng(L.latLng(MAIN_COORDINATES.lat.toFixed(ACCURACY), MAIN_COORDINATES.lng.toFixed(ACCURACY)));
   mapFilterFields.forEach((field) => field.value = 'any');
   mapFeaturesFilters.forEach((filter) => filter.checked = false);
-}
+};
 
 setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng, ACCURACY);
 
@@ -173,6 +177,7 @@ mainPinMarker.on('moveend', (evt) => {
 });
 
 export {
+  initMap,
   showDataErrorMessage,
   resetMap,
   addBaloonsOnMap
