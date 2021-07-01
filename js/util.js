@@ -10,4 +10,4 @@ function setBlockVisibility(block, isNoData) {
 
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-export {getRandomInteger, getRandomFloat, setDisabledAttribute, setBlockVisibility, isEscEvent};
+export {setDisabledAttribute, setBlockVisibility, isEscEvent};
