@@ -1,7 +1,17 @@
-import {ACCOMODATION_TYPE, ICON_SIZES, MAIN_COORDINATES, ACCURACY, ZOOM} from './constants.js';
+import {
+  ACCOMODATION_TYPE,
+  ICON_SIZES,
+  MAIN_COORDINATES,
+  ACCURACY,
+  ZOOM
+} from './constants.js';
 import {setBlockVisibility} from './util.js';
 import {activatePage} from './page.js';
-import {setAddressValue, mapFilterFields, mapFeaturesFilters} from './form.js';
+import {
+  setAddressValue,
+  mapFilterFields,
+  mapFeaturesFilters
+} from './form.js';
 
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');
@@ -21,11 +31,11 @@ const initMap = () => {
     .on('load', () => activatePage())
     .setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], ZOOM);
 
-  //инициализирует карту
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
   ).addTo(map);
 };
@@ -80,11 +90,15 @@ const createCard = (advert) => {
   } else if (advert.offer.rooms !== 0 && advert.offer.guests === 0) {
     capacity.textContent = `${String(advert.offer.rooms)} комнаты`;
   } else {
-    capacity.textContent = `${String(advert.offer.rooms)} комнаты для ${String(advert.offer.guests)} гостей`;
+    capacity.textContent =
+      `${String(advert.offer.rooms)} комнаты для ${String(advert.offer.guests)} гостей`;
   }
 
   const time = card.querySelector('.popup__text--time');
-  setBlockVisibility(time, (advert.offer.checkin === 0 && advert.offer.checkout === 0) || (advert.offer.checkin === 0 && advert.offer.checkout !== 0));
+  setBlockVisibility(
+    time,
+    (advert.offer.checkin === 0 && advert.offer.checkout === 0)
+     || (advert.offer.checkin === 0 && advert.offer.checkout !== 0));
   if (advert.offer.checkout === 0) {
     time.textContent = `Заезд после ${advert.offer.checkin}`;
   } else {
@@ -164,7 +178,10 @@ const addBaloonsOnMap = (adverts) => {
 
 //сбрасывает фильтры карты
 const resetMap = () => {
-  mainPinMarker.setLatLng(L.latLng(MAIN_COORDINATES.lat.toFixed(ACCURACY), MAIN_COORDINATES.lng.toFixed(ACCURACY)));
+  mainPinMarker.setLatLng(
+    L.latLng(
+      MAIN_COORDINATES.lat.toFixed(ACCURACY),
+      MAIN_COORDINATES.lng.toFixed(ACCURACY)));
   mapFilterFields.forEach((field) => field.value = 'any');
   mapFeaturesFilters.forEach((filter) => filter.checked = false);
 };

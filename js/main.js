@@ -7,10 +7,7 @@ import {getData} from './api.js';
 import {initMap, addBaloonsOnMap, showDataErrorMessage} from './map.js';
 import {ADVERTS_NUMBER} from './constants.js';
 
-//деактивирует страницу при загрузке
 deactivatePage();
-
-//активирует страницу после загрузки карты
 initMap();
 
 getData((adverts) => addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER)), showDataErrorMessage);

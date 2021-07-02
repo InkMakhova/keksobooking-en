@@ -5,29 +5,22 @@ import {
   MIN_ACCOMODATION_PRICES,
   MAX_ROOM_NUMBER,
   MIN_CAPACITY,
-  CHECK_TIMES,
   MAIN_COORDINATES,
-  ACCURACY,
-  DEFAULT_AVATAR
+  ACCURACY
 } from './constants.js';
 import {resetMap} from './map.js';
 import {sendData} from './api.js';
-import {
-  adForm,
-  formFields,
-  mapFilters,
-  mapFilterFields,
-  mapFeaturesFilters
-} from './page.js';
 
-/*const adForm = document.querySelector('.ad-form');
+const adForm = document.querySelector('.ad-form');
 const formFields = adForm.querySelectorAll('fieldset');
+const reset = adForm.querySelector('.ad-form__reset');
 
 const mapFilters = document.querySelector('.map__filters');
 const mapFilterFields = mapFilters.querySelectorAll('select');
-const mapFeaturesFilters = mapFilters.querySelector('#housing-features').querySelectorAll('.map__checkbox');*/
+const mapFeaturesFilters = mapFilters
+  .querySelector('#housing-features')
+  .querySelectorAll('.map__checkbox');
 
-const avatarImage = adForm.querySelector('.ad-form-header__preview').querySelector('img');
 const titleInput = adForm.querySelector('#title');
 const addressInput = adForm.querySelector('#address');
 const priceInput = adForm.querySelector('#price');
@@ -37,28 +30,14 @@ const capacity = adForm.querySelector('#capacity');
 const capacityOptions = capacity.querySelectorAll('option');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
-const descriptionInput = adForm.querySelector('#description');
-const featuresFielset = adForm.querySelector('.features');
-const featuresOptions = featuresFielset.querySelectorAll('.features__checkbox');
-const uplodedPhotos = adForm.querySelectorAll('.ad-form__photo');
 
-const successMessage = document.querySelector('#success')
+const successMessageTemplate = document.querySelector('#success')
   .content
-  .querySelector('.success')
-  .cloneNode(true);
+  .querySelector('.success');
 
-const errorMessage = document.querySelector('#error')
+const errorMessageTemplate = document.querySelector('#error')
   .content
-  .querySelector('.error')
-  .cloneNode(true);
-
-const closeButtonError = errorMessage.querySelector('.error__button');
-
-adForm.insertAdjacentElement('beforeend', successMessage);
-adForm.insertAdjacentElement('beforeend', errorMessage);
-
-successMessage.hidden = true;
-errorMessage.hidden = true;
+  .querySelector('.error');
 
 //устанавливает значение адреса
 const setAddressValue = (latitude, longitude, accuracy) => {
@@ -70,7 +49,8 @@ const validateTitle = () => {
   if (titleInput.validity.valueMissing) {
     titleInput.setCustomValidity('Обязательное поле для заполнения');
   } else if (!titleInput.validity.valueMissing && titleInput.value.length < titleInput.minLength) {
-    titleInput.setCustomValidity(`Поле должно содержать минимум ${titleInput.minLength} символов. Еще ${titleInput.minLength - titleInput.value.length} символов.`);
+    titleInput.setCustomValidity(
+      `Поле должно содержать минимум ${titleInput.minLength} символов. Еще ${titleInput.minLength - titleInput.value.length} символов.`);
   } else {
     titleInput.setCustomValidity('');
   }
@@ -79,7 +59,8 @@ const validateTitle = () => {
 //валидация поля цены
 const validatePrice = () => {
   if (Number(priceInput.value) < MIN_ACCOMODATION_PRICES[typeInput.value]) {
-    priceInput.setCustomValidity(`Минимальная цена за тип размещения ${ACCOMODATION_TYPE[typeInput.value]} - ${MIN_ACCOMODATION_PRICES[typeInput.value]} руб.`);
+    priceInput.setCustomValidity(
+      `Минимальная цена за тип размещения ${ACCOMODATION_TYPE[typeInput.value]} - ${MIN_ACCOMODATION_PRICES[typeInput.value]} руб.`);
   } else if (Number(priceInput.value) > Number(priceInput.max)) {
     priceInput.setCustomValidity(`Максимальная цена - ${priceInput.max} руб.`);
   } else {
@@ -127,53 +108,43 @@ const setTimeOption = (field, evt) => {
   field.value = evt.target.value;
 };
 
-//сбрасывает поля формы
-const resetForm = () => {
-  avatarImage.src = DEFAULT_AVATAR;
-  titleInput.value = '';
-  setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng, ACCURACY);
-  typeInput.value = TYPES[1];
-  priceInput.value = '';
-  priceInput.placeholder = MIN_ACCOMODATION_PRICES[TYPES[1]];
-  roomNumber.value = '1';
-  capacity.value = '1';
-  timeIn.value = CHECK_TIMES[0];
-  timeOut.value = CHECK_TIMES[0];
-  descriptionInput.value = '';
-  featuresOptions.forEach((option) => option.checked = false);
-  uplodedPhotos.forEach((photo) => photo.remove());
-};
-
-const closeSuccessMessage = () => {
-  successMessage.hidden = true;
-  document.removeEventListener('keydown', (evt) => {
-    if (isEscEvent(evt)) {
-      closeSuccessMessage();
-    }
-  });
-  successMessage.removeEventListener('mousedown', closeSuccessMessage);
+const closeSuccessMessage = (message) => {
+  message.remove();
 };
 
 const showSuccessMessage = () => {
-  successMessage.hidden = false;
-  document.addEventListener('keydown', (evt) => {
-    if (isEscEvent(evt)) {
-      closeSuccessMessage();
-    }
-  });
-  successMessage.addEventListener('mousedown', closeSuccessMessage);
+  const successMessage = successMessageTemplate.cloneNode(true);
+  adForm.insertAdjacentElement('beforeend', successMessage);
+  setTimeout(() => {closeSuccessMessage(successMessage);}, 1000);
 };
 
-const closeErrorMessage = () => {
-  errorMessage.hidden = true;
-  closeButtonError.removeEventListener('click', closeErrorMessage);
-  errorMessage.removeEventListener('mousedown', closeErrorMessage);
+const closeErrorMessage = (message) => {
+  message.remove();
 };
 
 const showErrorMessage = () => {
-  errorMessage.hidden = false;
-  closeButtonError.addEventListener('click', closeErrorMessage);
-  errorMessage.addEventListener('mousedown', closeErrorMessage);
+  const errorMessage = errorMessageTemplate.cloneNode(true);
+  const closeButtonError = errorMessage.querySelector('.error__button');
+
+  adForm.insertAdjacentElement('beforeend', errorMessage);
+  closeButtonError.addEventListener('click', () => {
+    closeErrorMessage(errorMessage);
+  });
+  errorMessage.addEventListener('mousedown', () => {
+    closeErrorMessage(errorMessage);
+  });
+  document.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      closeErrorMessage(errorMessage);
+    }
+  });
+};
+
+//сбрасывает поля формы
+const resetForm = () => {
+  adForm.reset();
+  setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng, ACCURACY);
+  priceInput.placeholder = MIN_ACCOMODATION_PRICES[TYPES[1]];
 };
 
 const reportDataSentSuccess = () => {
@@ -227,8 +198,7 @@ const setUserFormSubmit = (onSuccess) => {
 };
 
 //очистка формы
-adForm.addEventListener('reset', (evt) => {
-  evt.preventDefault();
+reset.addEventListener('click', () => {
   resetMap();
   resetForm();
 });
