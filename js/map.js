@@ -182,6 +182,7 @@ const resetMap = () => {
     L.latLng(
       MAIN_COORDINATES.lat.toFixed(ACCURACY),
       MAIN_COORDINATES.lng.toFixed(ACCURACY)));
+  map.setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], ZOOM);
   mapFilterFields.forEach((field) => field.value = 'any');
   mapFeaturesFilters.forEach((filter) => filter.checked = false);
 };
