@@ -18,6 +18,11 @@ const mapFeaturesFilters = mapFilters
   .querySelector('#housing-features')
   .querySelectorAll('.map__checkbox');
 
+const typeFilter = mapFilters.querySelector('#housing-type');
+const priceFilter = mapFilters.querySelector('#housing-price');
+const roomsFilter = mapFilters.querySelector('#housing-rooms');
+const guestsFilter = mapFilters.querySelector('#housing-guests');
+
 const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
