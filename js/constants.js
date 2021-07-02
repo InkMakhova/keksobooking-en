@@ -8,7 +8,13 @@ const TYPES = [
   'hotel',
 ];
 
-const ACCOMODATION_TYPE = {
+const MAX_ROOM_NUMBER = 100;
+const MIN_CAPACITY = 0;
+
+const ACCURACY = 5;
+const ZOOM = 12;
+
+const AccomodationTypes = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -16,7 +22,7 @@ const ACCOMODATION_TYPE = {
   hotel: 'Отель',
 };
 
-const MIN_ACCOMODATION_PRICES = {
+const MinAccomodationPrices = {
   bungalow: 0,
   flat: 1000,
   hotel: 3000,
@@ -24,33 +30,27 @@ const MIN_ACCOMODATION_PRICES = {
   palace: 10000,
 };
 
-const MAX_ROOM_NUMBER = 100;
-const MIN_CAPACITY = 0;
-
-const ICON_SIZES = {
+const IconSizes = {
   mainPinWidth: 52,
   mainPinHeight: 52,
   pinWidth: 40,
   pinHeight: 40,
 };
 
-const MAIN_COORDINATES = {
+const MainCoordinates = {
   lat: 35.68553153747553,
   lng: 139.75276363268588,
 };
 
-const ACCURACY = 5;
-const ZOOM = 12;
-
 export {
   ADVERTS_NUMBER,
   TYPES,
-  ACCOMODATION_TYPE,
-  MIN_ACCOMODATION_PRICES,
   MAX_ROOM_NUMBER,
   MIN_CAPACITY,
-  ICON_SIZES,
-  MAIN_COORDINATES,
   ACCURACY,
-  ZOOM
+  ZOOM,
+  AccomodationTypes,
+  MinAccomodationPrices,
+  IconSizes,
+  MainCoordinates
 };

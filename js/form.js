@@ -1,12 +1,12 @@
 import {isEscEvent} from './util.js';
 import {
   TYPES,
-  ACCOMODATION_TYPE,
-  MIN_ACCOMODATION_PRICES,
   MAX_ROOM_NUMBER,
   MIN_CAPACITY,
-  MAIN_COORDINATES,
-  ACCURACY
+  ACCURACY,
+  AccomodationTypes,
+  MinAccomodationPrices,
+  MainCoordinates
 } from './constants.js';
 import {resetMap} from './map.js';
 import {sendData} from './api.js';
@@ -58,9 +58,9 @@ const validateTitle = () => {
 
 //валидация поля цены
 const validatePrice = () => {
-  if (Number(priceInput.value) < MIN_ACCOMODATION_PRICES[typeInput.value]) {
+  if (Number(priceInput.value) < MinAccomodationPrices[typeInput.value]) {
     priceInput.setCustomValidity(
-      `Минимальная цена за тип размещения ${ACCOMODATION_TYPE[typeInput.value]} - ${MIN_ACCOMODATION_PRICES[typeInput.value]} руб.`);
+      `Минимальная цена за тип размещения ${AccomodationTypes[typeInput.value]} - ${MinAccomodationPrices[typeInput.value]} руб.`);
   } else if (Number(priceInput.value) > Number(priceInput.max)) {
     priceInput.setCustomValidity(`Максимальная цена - ${priceInput.max} руб.`);
   } else {
@@ -143,8 +143,8 @@ const showErrorMessage = () => {
 //сбрасывает поля формы
 const resetForm = () => {
   adForm.reset();
-  setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng, ACCURACY);
-  priceInput.placeholder = MIN_ACCOMODATION_PRICES[TYPES[1]];
+  setAddressValue(MainCoordinates.lat, MainCoordinates.lng, ACCURACY);
+  priceInput.placeholder = MinAccomodationPrices[TYPES[1]];
 };
 
 const reportDataSentSuccess = () => {
@@ -154,7 +154,7 @@ const reportDataSentSuccess = () => {
 };
 
 //устанавливает плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
-priceInput.placeholder = MIN_ACCOMODATION_PRICES[typeInput.value];
+priceInput.placeholder = MinAccomodationPrices[typeInput.value];
 //устанавливает валидное значение количества гостей при загрузке страницы
 getValidCapacityOptions(Number(roomNumber.value));
 
@@ -172,7 +172,7 @@ capacity.addEventListener('change', (evt) => {
 
 //изменение минимальной цены в placeholder в зависимости от выбора типа размещения
 typeInput.addEventListener('change', (evt) => {
-  priceInput.placeholder = MIN_ACCOMODATION_PRICES[evt.target.value];
+  priceInput.placeholder = MinAccomodationPrices[evt.target.value];
   validatePrice();
 });
 

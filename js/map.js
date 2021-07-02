@@ -1,9 +1,9 @@
 import {
-  ACCOMODATION_TYPE,
-  ICON_SIZES,
-  MAIN_COORDINATES,
   ACCURACY,
-  ZOOM
+  ZOOM,
+  AccomodationTypes,
+  IconSizes,
+  MainCoordinates
 } from './constants.js';
 import {setBlockVisibility} from './util.js';
 import {activatePage} from './page.js';
@@ -29,7 +29,7 @@ const map = L.map(mapCanvas);
 const initMap = () => {
   map
     .on('load', () => activatePage())
-    .setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], ZOOM);
+    .setView([MainCoordinates.lat, MainCoordinates.lng], ZOOM);
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -42,14 +42,14 @@ const initMap = () => {
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
-  iconSize: [ICON_SIZES.mainPinWidth, ICON_SIZES.mainPinHeight],
-  iconAnchor: [ICON_SIZES.mainPinWidth / 2, ICON_SIZES.mainPinHeight],
+  iconSize: [IconSizes.mainPinWidth, IconSizes.mainPinHeight],
+  iconAnchor: [IconSizes.mainPinWidth / 2, IconSizes.mainPinHeight],
 });
 
 const mainPinMarker = L.marker(
   {
-    lat: MAIN_COORDINATES.lat,
-    lng: MAIN_COORDINATES.lng,
+    lat: MainCoordinates.lat,
+    lng: MainCoordinates.lng,
   },
   {
     draggable: true,
@@ -81,7 +81,7 @@ const createCard = (advert) => {
 
   const type = card.querySelector('.popup__type');
   setBlockVisibility(type, advert.offer.type === 0);
-  type.textContent = ACCOMODATION_TYPE[advert.offer.type];
+  type.textContent = AccomodationTypes[advert.offer.type];
 
   const capacity = card.querySelector('.popup__text--capacity');
   setBlockVisibility(capacity, advert.offer.rooms === 0 && advert.offer.guests === 0);
@@ -151,8 +151,8 @@ const addBaloonsOnMap = (adverts) => {
 
     const icon = L.icon({
       iconUrl: 'img/pin.svg',
-      iconSize: [ICON_SIZES.pinWidth, ICON_SIZES.pinHeight],
-      iconAnchor: [ICON_SIZES.pinWidth / 2, ICON_SIZES.pinHeight],
+      iconSize: [IconSizes.pinWidth, IconSizes.pinHeight],
+      iconAnchor: [IconSizes.pinWidth / 2, IconSizes.pinHeight],
     });
 
     const marker = L.marker(
@@ -180,14 +180,14 @@ const addBaloonsOnMap = (adverts) => {
 const resetMap = () => {
   mainPinMarker.setLatLng(
     L.latLng(
-      MAIN_COORDINATES.lat.toFixed(ACCURACY),
-      MAIN_COORDINATES.lng.toFixed(ACCURACY)));
-  map.setView([MAIN_COORDINATES.lat, MAIN_COORDINATES.lng], ZOOM);
+      MainCoordinates.lat.toFixed(ACCURACY),
+      MainCoordinates.lng.toFixed(ACCURACY)));
+  map.setView([MainCoordinates.lat, MainCoordinates.lng], ZOOM);
   mapFilterFields.forEach((field) => field.value = 'any');
   mapFeaturesFilters.forEach((filter) => filter.checked = false);
 };
 
-setAddressValue(MAIN_COORDINATES.lat, MAIN_COORDINATES.lng, ACCURACY);
+setAddressValue(MainCoordinates.lat, MainCoordinates.lng, ACCURACY);
 
 mainPinMarker.addTo(map);
 mainPinMarker.on('moveend', (evt) => {
