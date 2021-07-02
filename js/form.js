@@ -1,10 +1,18 @@
-import {setDisabledAttribute} from './util.js';
+import {isEscEvent} from './util.js';
+import {
+  TYPES,
+  MAX_ROOM_NUMBER,
+  MIN_CAPACITY,
+  ACCURACY,
+  AccomodationTypes,
+  MinAccomodationPrices,
+  MainCoordinates
+} from './constants.js';
+import {resetMap} from './map.js';
+import {sendData} from './api.js';
 
 const adForm = document.querySelector('.ad-form');
-const mapFilters = document.querySelector('.map__filters');
-
-const formFields = adForm.querySelectorAll('fieldset');
-const mapFilterFields = mapFilters.querySelectorAll('select');
+const reset = adForm.querySelector('.ad-form__reset');
 
 const titleInput = adForm.querySelector('#title');
 const addressInput = adForm.querySelector('#address');
@@ -16,60 +24,36 @@ const capacityOptions = capacity.querySelectorAll('option');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
 
-const MIN_ACCOMODATION_PRICES = {
-  bungalow: 0,
-  flat: 1000,
-  hotel: 3000,
-  house: 5000,
-  palace: 10000,
+const successMessageTemplate = document.querySelector('#success')
+  .content
+  .querySelector('.success');
+
+const errorMessageTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+
+//устанавливает значение адреса
+const setAddressValue = (latitude, longitude, accuracy) => {
+  addressInput.value = `${latitude.toFixed(accuracy)}, ${longitude.toFixed(accuracy)}`;
 };
-
-const ACCOMODATION_TYPE = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
-};
-
-const MAX_ROOM_NUMBER = 100;
-const MIN_CAPACITY = 0;
-
-function deactivatePage() {
-  //добавляем стили неактивного состояния
-  adForm.classList.add('ad-form--disabled');
-  mapFilters.classList.add('map__filters--disabled');
-
-  //делаем поля формы и фильтры карты неактивными
-  setDisabledAttribute(formFields, true);
-  setDisabledAttribute(mapFilterFields, true);
-}
-
-function activatePage() {
-  //удаляем стили неактивного состояния
-  adForm.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map__filters--disabled');
-
-  //делаем поля формы и фильтры карты активными
-  setDisabledAttribute(formFields, false);
-  setDisabledAttribute(mapFilterFields, false);
-}
 
 //валидация заголовка объявления
-function validateTitle() {
+const validateTitle = () => {
   if (titleInput.validity.valueMissing) {
     titleInput.setCustomValidity('Обязательное поле для заполнения');
   } else if (!titleInput.validity.valueMissing && titleInput.value.length < titleInput.minLength) {
-    titleInput.setCustomValidity(`Поле должно содержать минимум ${titleInput.minLength} символов. Еще ${titleInput.minLength - titleInput.value.length} символов.`);
+    titleInput.setCustomValidity(
+      `Поле должно содержать минимум ${titleInput.minLength} символов. Еще ${titleInput.minLength - titleInput.value.length} символов.`);
   } else {
     titleInput.setCustomValidity('');
   }
-}
+};
 
 //валидация поля цены
-function validatePrice() {
-  if (Number(priceInput.value) < MIN_ACCOMODATION_PRICES[typeInput.value]) {
-    priceInput.setCustomValidity(`Минимальная цена за тип размещения ${ACCOMODATION_TYPE[typeInput.value]} - ${MIN_ACCOMODATION_PRICES[typeInput.value]} руб.`);
+const validatePrice = () => {
+  if (Number(priceInput.value) < MinAccomodationPrices[typeInput.value]) {
+    priceInput.setCustomValidity(
+      `Минимальная цена за тип размещения ${AccomodationTypes[typeInput.value]} - ${MinAccomodationPrices[typeInput.value]} руб.`);
   } else if (Number(priceInput.value) > Number(priceInput.max)) {
     priceInput.setCustomValidity(`Максимальная цена - ${priceInput.max} руб.`);
   } else {
@@ -77,10 +61,10 @@ function validatePrice() {
   }
 
   priceInput.reportValidity();
-}
+};
 
 //валидация поля количества гостей
-function validateCapacity(guestsNumber, rooms) {
+const validateCapacity = (guestsNumber, rooms) => {
   if (guestsNumber > rooms) {
     capacity.setCustomValidity('Количество гостей не соотвествует количеству комнат.');
   } else if (guestsNumber < rooms && rooms === MAX_ROOM_NUMBER && guestsNumber !== MIN_CAPACITY) {
@@ -92,10 +76,10 @@ function validateCapacity(guestsNumber, rooms) {
   }
 
   capacity.reportValidity();
-}
+};
 
-//получаем валидный список вариантов размещения при заданном количестве комнат
-function getValidCapacityOptions(rooms) {
+//получает валидный список вариантов размещения при заданном количестве комнат
+const getValidCapacityOptions = (rooms) => {
   capacityOptions.forEach((option) => option.disabled = false);
   if (rooms === MAX_ROOM_NUMBER) {
     capacityOptions.forEach((option) => {
@@ -110,16 +94,57 @@ function getValidCapacityOptions(rooms) {
       }
     });
   }
-}
+};
 
-//устанавливаем время заезда-выезда
-function setTimeOption(field, evt) {
+//устанавливает время заезда-выезда
+const setTimeOption = (field, evt) => {
   field.value = evt.target.value;
-}
+};
 
-//устанавливаем правильный плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
-priceInput.placeholder = MIN_ACCOMODATION_PRICES[typeInput.value];
-//устанавливаем валидное значение количества гостей при загрузке страницы
+const closeMessage = (message) => {
+  message.remove();
+};
+
+const showSuccessMessage = () => {
+  const successMessage = successMessageTemplate.cloneNode(true);
+  adForm.insertAdjacentElement('beforeend', successMessage);
+  setTimeout(() => {closeMessage(successMessage);}, 1000);
+};
+
+const showErrorMessage = () => {
+  const errorMessage = errorMessageTemplate.cloneNode(true);
+  const closeButtonError = errorMessage.querySelector('.error__button');
+
+  adForm.insertAdjacentElement('beforeend', errorMessage);
+  closeButtonError.addEventListener('click', () => {
+    closeMessage(errorMessage);
+  });
+  errorMessage.addEventListener('mousedown', () => {
+    closeMessage(errorMessage);
+  });
+  document.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      closeMessage(errorMessage);
+    }
+  });
+};
+
+//сбрасывает поля формы
+const resetForm = () => {
+  adForm.reset();
+  setAddressValue(MainCoordinates.lat, MainCoordinates.lng, ACCURACY);
+  priceInput.placeholder = MinAccomodationPrices[TYPES[1]];
+};
+
+const reportDataSentSuccess = () => {
+  showSuccessMessage();
+  resetForm();
+  resetMap();
+};
+
+//устанавливает плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
+priceInput.placeholder = MinAccomodationPrices[typeInput.value];
+//устанавливает валидное значение количества гостей при загрузке страницы
 getValidCapacityOptions(Number(roomNumber.value));
 
 titleInput.addEventListener('input', validateTitle);
@@ -136,10 +161,11 @@ capacity.addEventListener('change', (evt) => {
 
 //изменение минимальной цены в placeholder в зависимости от выбора типа размещения
 typeInput.addEventListener('change', (evt) => {
-  priceInput.placeholder = MIN_ACCOMODATION_PRICES[evt.target.value];
+  priceInput.placeholder = MinAccomodationPrices[evt.target.value];
   validatePrice();
 });
 
+//изменение времени выезда/заезда взаимозависимо
 timeIn.addEventListener('change', (evt) => {
   setTimeOption(timeOut, evt);
 });
@@ -147,4 +173,27 @@ timeOut.addEventListener('change', (evt) => {
   setTimeOption(timeIn, evt);
 });
 
-export {deactivatePage, activatePage, addressInput};
+//отправка формы
+const setUserFormSubmit = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(),
+      () => showErrorMessage(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+//очистка формы
+reset.addEventListener('click', () => {
+  resetMap();
+  resetForm();
+});
+
+export {
+  setAddressValue,
+  setUserFormSubmit,
+  reportDataSentSuccess
+};

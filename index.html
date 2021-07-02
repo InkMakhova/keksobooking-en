@@ -170,7 +170,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--submit">
           <button class="ad-form__submit" type="submit">Опубликовать</button>
-          или <button class="ad-form__reset" type="reset">очистить</button>
+          или <button class="ad-form__reset" type="button">очистить</button>
         </fieldset>
       </form>
     </section>
@@ -230,6 +230,13 @@
     <div class="error">
       <p class="error__message">Ошибка размещения объявления</p>
       <button type="button" class="error__button">Попробовать снова</button>
+    </div>
+  </template>
+
+  <!-- Сообщение об ошибке загрузки данных -->
+  <template id="data-error">
+    <div class="data-error">
+      <p class="data-error__message">Ошибка загрузки данных с сервера, попробуйте перезагрузить страницу</p>
     </div>
   </template>
 
