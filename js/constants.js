@@ -27,12 +27,6 @@ const MIN_ACCOMODATION_PRICES = {
 const MAX_ROOM_NUMBER = 100;
 const MIN_CAPACITY = 0;
 
-const CHECK_TIMES = [
-  '12:00',
-  '13:00',
-  '14:00',
-];
-
 const ICON_SIZES = {
   mainPinWidth: 52,
   mainPinHeight: 52,
@@ -46,10 +40,7 @@ const MAIN_COORDINATES = {
 };
 
 const ACCURACY = 5;
-
 const ZOOM = 12;
-
-const DEFAULT_AVATAR = 'img/muffin-grey.svg';
 
 export {
   ADVERTS_NUMBER,
@@ -58,10 +49,8 @@ export {
   MIN_ACCOMODATION_PRICES,
   MAX_ROOM_NUMBER,
   MIN_CAPACITY,
-  CHECK_TIMES,
   ICON_SIZES,
   MAIN_COORDINATES,
   ACCURACY,
-  ZOOM,
-  DEFAULT_AVATAR
+  ZOOM
 };
