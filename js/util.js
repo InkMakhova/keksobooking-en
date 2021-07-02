@@ -1,12 +1,12 @@
-function setDisabledAttribute(fields, isDisabled) {
+const setDisabledAttribute = (fields, isDisabled) => {
   fields.forEach((field) => field.disabled = isDisabled);
-}
+};
 
-function setBlockVisibility(block, isNoData) {
+const setBlockVisibility = (block, isNoData) => {
   if (isNoData) {
     block.classList.add('hidden');
   }
-}
+};
 
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 

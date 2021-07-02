@@ -1,11 +1,13 @@
 import {setDisabledAttribute} from './util.js';
-import {
-  adForm,
-  formFields,
-  mapFilters,
-  mapFilterFields,
-  mapFeaturesFilters
-} from './form.js';
+
+const adForm = document.querySelector('.ad-form');
+const formFields = adForm.querySelectorAll('fieldset');
+
+const mapFilters = document.querySelector('.map__filters');
+const mapFilterFields = mapFilters.querySelectorAll('select');
+const mapFeaturesFilters = mapFilters
+  .querySelector('#housing-features')
+  .querySelectorAll('.map__checkbox');
 
 const deactivatePage = () => {
   adForm.classList.add('ad-form--disabled');

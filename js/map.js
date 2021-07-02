@@ -7,14 +7,16 @@ import {
 } from './constants.js';
 import {setBlockVisibility} from './util.js';
 import {activatePage} from './page.js';
-import {
-  setAddressValue,
-  mapFilterFields,
-  mapFeaturesFilters
-} from './form.js';
+import {setAddressValue} from './form.js';
 
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');
+
+const mapFilters = document.querySelector('.map__filters');
+const mapFilterFields = mapFilters.querySelectorAll('select');
+const mapFeaturesFilters = mapFilters
+  .querySelector('#housing-features')
+  .querySelectorAll('.map__checkbox');
 
 const cardTemplate = document.querySelector('#card')
   .content

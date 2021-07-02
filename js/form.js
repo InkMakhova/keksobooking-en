@@ -12,14 +12,7 @@ import {resetMap} from './map.js';
 import {sendData} from './api.js';
 
 const adForm = document.querySelector('.ad-form');
-const formFields = adForm.querySelectorAll('fieldset');
 const reset = adForm.querySelector('.ad-form__reset');
-
-const mapFilters = document.querySelector('.map__filters');
-const mapFilterFields = mapFilters.querySelectorAll('select');
-const mapFeaturesFilters = mapFilters
-  .querySelector('#housing-features')
-  .querySelectorAll('.map__checkbox');
 
 const titleInput = adForm.querySelector('#title');
 const addressInput = adForm.querySelector('#address');
@@ -108,18 +101,14 @@ const setTimeOption = (field, evt) => {
   field.value = evt.target.value;
 };
 
-const closeSuccessMessage = (message) => {
+const closeMessage = (message) => {
   message.remove();
 };
 
 const showSuccessMessage = () => {
   const successMessage = successMessageTemplate.cloneNode(true);
   adForm.insertAdjacentElement('beforeend', successMessage);
-  setTimeout(() => {closeSuccessMessage(successMessage);}, 1000);
-};
-
-const closeErrorMessage = (message) => {
-  message.remove();
+  setTimeout(() => {closeMessage(successMessage);}, 1000);
 };
 
 const showErrorMessage = () => {
@@ -128,14 +117,14 @@ const showErrorMessage = () => {
 
   adForm.insertAdjacentElement('beforeend', errorMessage);
   closeButtonError.addEventListener('click', () => {
-    closeErrorMessage(errorMessage);
+    closeMessage(errorMessage);
   });
   errorMessage.addEventListener('mousedown', () => {
-    closeErrorMessage(errorMessage);
+    closeMessage(errorMessage);
   });
   document.addEventListener('keydown', (evt) => {
     if (isEscEvent(evt)) {
-      closeErrorMessage(errorMessage);
+      closeMessage(errorMessage);
     }
   });
 };
@@ -204,11 +193,6 @@ reset.addEventListener('click', () => {
 });
 
 export {
-  adForm,
-  formFields,
-  mapFilters,
-  mapFilterFields,
-  mapFeaturesFilters,
   setAddressValue,
   setUserFormSubmit,
   reportDataSentSuccess
