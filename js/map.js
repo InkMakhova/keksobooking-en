@@ -1,13 +1,15 @@
 import {
+  ADVERTS_NUMBER,
   ACCURACY,
   ZOOM,
   AccomodationTypes,
   IconSizes,
   MainCoordinates
 } from './constants.js';
-import {setBlockVisibility} from './util.js';
+import {setBlockVisibility, setDisabledAttribute, isFilterMatched, isPriceMatched} from './util.js';
 import {activatePage} from './page.js';
 import {setAddressValue} from './form.js';
+import {getData} from './api.js';
 
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');
@@ -22,6 +24,19 @@ const typeFilter = mapFilters.querySelector('#housing-type');
 const priceFilter = mapFilters.querySelector('#housing-price');
 const roomsFilter = mapFilters.querySelector('#housing-rooms');
 const guestsFilter = mapFilters.querySelector('#housing-guests');
+const wifiFilter = mapFilters.querySelector('#filter-wifi');
+const dishwasherFilter = mapFilters.querySelector('#filter-dishwasher');
+const parkingFilter = mapFilters.querySelector('#filter-parking');
+const washerFilter = mapFilters.querySelector('#filter-washer');
+const elevatorFilter = mapFilters.querySelector('#filter-elevator');
+const conditionerFilter = mapFilters.querySelector('#filter-conditioner');
+
+const filterValues = {
+  type: 'any',
+  price: 'any',
+  rooms: 'any',
+  guests: 'any',
+};
 
 const cardTemplate = document.querySelector('#card')
   .content
@@ -64,9 +79,9 @@ const mainPinMarker = L.marker(
   },
 );
 
-const markerGroup = L.layerGroup().addTo(map);
+let markerGroup;
 
-const showDataErrorMessage = () => {
+const setDataErrorStatus = () => {
   const dataErrorMessage = dataErrorMessageTemplate.cloneNode(true);
   mapCanvas.insertAdjacentElement('beforeend', dataErrorMessage);
 };
@@ -153,6 +168,8 @@ const createCard = (advert) => {
 };
 
 const addBaloonsOnMap = (adverts) => {
+  markerGroup = L.layerGroup().addTo(map);
+
   adverts.forEach((element, index) => {
     const {lat, lng} = element.location;
 
@@ -181,6 +198,10 @@ const addBaloonsOnMap = (adverts) => {
         },
       );
   });
+
+  mapFilters.classList.remove('map__filters--disabled');
+  setDisabledAttribute(mapFilterFields, false);
+  setDisabledAttribute(mapFeaturesFilters, false);
 };
 
 //сбрасывает фильтры карты
@@ -201,9 +222,42 @@ mainPinMarker.on('moveend', (evt) => {
   setAddressValue(evt.target.getLatLng().lat, evt.target.getLatLng().lng, ACCURACY);
 });
 
+const applyFilter = () => {
+  markerGroup.remove();
+
+  getData((adverts) => {
+    adverts = adverts.filter((advert) =>
+      isFilterMatched(filterValues.type, advert.offer.type)
+        && isPriceMatched(filterValues.price, advert.offer.price)
+          && isFilterMatched(filterValues.rooms, advert.offer.rooms)
+            && isFilterMatched(filterValues.guests, advert.offer.guests));
+    addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
+  }, setDataErrorStatus);
+};
+
+typeFilter.addEventListener('change', (evt) => {
+  filterValues.type = evt.target.value;
+  applyFilter();
+});
+
+priceFilter.addEventListener('change', (evt) => {
+  filterValues.price = evt.target.value;
+  applyFilter();
+});
+
+roomsFilter.addEventListener('change', (evt) => {
+  filterValues.rooms = evt.target.value;
+  applyFilter();
+});
+
+guestsFilter.addEventListener('change', (evt) => {
+  filterValues.guests = evt.target.value;
+  applyFilter();
+});
+
 export {
   initMap,
-  showDataErrorMessage,
+  setDataErrorStatus,
   resetMap,
   addBaloonsOnMap
 };

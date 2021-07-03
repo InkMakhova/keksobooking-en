@@ -30,6 +30,12 @@ const MinAccomodationPrices = {
   palace: 10000,
 };
 
+const priceCategories = {
+  middle: 'middle',
+  low: 'low',
+  high: 'high',
+};
+
 const IconSizes = {
   mainPinWidth: 52,
   mainPinHeight: 52,
@@ -51,6 +57,7 @@ export {
   ZOOM,
   AccomodationTypes,
   MinAccomodationPrices,
+  priceCategories,
   IconSizes,
   MainCoordinates
 };

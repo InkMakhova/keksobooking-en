@@ -966,7 +966,7 @@ fieldset {
   text-align: center;
   vertical-align: middle;
 
-  background-color: rgba(245, 0, 0, 0.7);
+  background-color: rgba(245, 0, 0, 0.5);
 }
 
 .success__message,
