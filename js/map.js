@@ -1,12 +1,22 @@
 import {
   ADVERTS_NUMBER,
+  RERENDER_DELAY,
   ACCURACY,
   ZOOM,
+  Features,
   AccomodationTypes,
+  FilterValues,
   IconSizes,
   MainCoordinates
 } from './constants.js';
-import {setBlockVisibility, setDisabledAttribute, isFilterMatched, isPriceMatched} from './util.js';
+import {
+  setBlockVisibility,
+  setDisabledAttribute,
+  isFilterMatched,
+  isPriceMatched,
+  isChecked,
+  debounce
+} from './util.js';
 import {activatePage} from './page.js';
 import {setAddressValue} from './form.js';
 import {getData} from './api.js';
@@ -30,13 +40,6 @@ const parkingFilter = mapFilters.querySelector('#filter-parking');
 const washerFilter = mapFilters.querySelector('#filter-washer');
 const elevatorFilter = mapFilters.querySelector('#filter-elevator');
 const conditionerFilter = mapFilters.querySelector('#filter-conditioner');
-
-const filterValues = {
-  type: 'any',
-  price: 'any',
-  rooms: 'any',
-  guests: 'any',
-};
 
 const cardTemplate = document.querySelector('#card')
   .content
@@ -213,6 +216,9 @@ const resetMap = () => {
   map.setView([MainCoordinates.lat, MainCoordinates.lng], ZOOM);
   mapFilterFields.forEach((field) => field.value = 'any');
   mapFeaturesFilters.forEach((filter) => filter.checked = false);
+  getData((adverts) => {
+    addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
+  }, setDataErrorStatus);
 };
 
 setAddressValue(MainCoordinates.lat, MainCoordinates.lng, ACCURACY);
@@ -222,38 +228,54 @@ mainPinMarker.on('moveend', (evt) => {
   setAddressValue(evt.target.getLatLng().lat, evt.target.getLatLng().lng, ACCURACY);
 });
 
+//фильтрация
 const applyFilter = () => {
-  markerGroup.remove();
+  debounce(() => {
+    markerGroup.remove();
 
-  getData((adverts) => {
-    adverts = adverts.filter((advert) =>
-      isFilterMatched(filterValues.type, advert.offer.type)
-        && isPriceMatched(filterValues.price, advert.offer.price)
-          && isFilterMatched(filterValues.rooms, advert.offer.rooms)
-            && isFilterMatched(filterValues.guests, advert.offer.guests));
-    addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
-  }, setDataErrorStatus);
+    getData((adverts) => {
+      adverts = adverts.filter((advert) =>
+        isFilterMatched(FilterValues.type, advert.offer.type)
+          && isPriceMatched(FilterValues.price, advert.offer.price)
+            && isFilterMatched(FilterValues.rooms, advert.offer.rooms)
+              && isFilterMatched(FilterValues.guests, advert.offer.guests)
+                && isChecked(wifiFilter, advert.offer.features, Features.wifi)
+                  && isChecked(dishwasherFilter, advert.offer.features, Features.dishwasher)
+                    && isChecked(parkingFilter, advert.offer.features, Features.parking)
+                      && isChecked(washerFilter, advert.offer.features, Features.washer)
+                        && isChecked(elevatorFilter, advert.offer.features, Features.elevator)
+                          && isChecked(conditionerFilter, advert.offer.features, Features.conditioner));
+      addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
+    }, setDataErrorStatus);
+  }, RERENDER_DELAY)();
 };
 
 typeFilter.addEventListener('change', (evt) => {
-  filterValues.type = evt.target.value;
+  FilterValues.type = evt.target.value;
   applyFilter();
 });
 
 priceFilter.addEventListener('change', (evt) => {
-  filterValues.price = evt.target.value;
+  FilterValues.price = evt.target.value;
   applyFilter();
 });
 
 roomsFilter.addEventListener('change', (evt) => {
-  filterValues.rooms = evt.target.value;
+  FilterValues.rooms = evt.target.value;
   applyFilter();
 });
 
 guestsFilter.addEventListener('change', (evt) => {
-  filterValues.guests = evt.target.value;
+  FilterValues.guests = evt.target.value;
   applyFilter();
 });
+
+wifiFilter.addEventListener('click', applyFilter);
+dishwasherFilter.addEventListener('click', applyFilter);
+parkingFilter.addEventListener('click', applyFilter);
+washerFilter.addEventListener('click', applyFilter);
+elevatorFilter.addEventListener('click', applyFilter);
+conditionerFilter.addEventListener('click', applyFilter);
 
 export {
   initMap,

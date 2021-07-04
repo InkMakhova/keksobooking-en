@@ -1,5 +1,7 @@
 const ADVERTS_NUMBER = 10;
 
+const RERENDER_DELAY = 500;
+
 const TYPES = [
   'palace',
   'flat',
@@ -30,10 +32,26 @@ const MinAccomodationPrices = {
   palace: 10000,
 };
 
-const priceCategories = {
+const PriceCategories = {
   middle: 'middle',
   low: 'low',
   high: 'high',
+};
+
+const FilterValues = {
+  type: 'any',
+  price: 'any',
+  rooms: 'any',
+  guests: 'any',
+};
+
+const Features = {
+  wifi: 'wifi',
+  dishwasher: 'dishwasher',
+  parking: 'parking',
+  washer: 'washer',
+  elevator: 'elevator',
+  conditioner: 'conditioner',
 };
 
 const IconSizes = {
@@ -50,14 +68,17 @@ const MainCoordinates = {
 
 export {
   ADVERTS_NUMBER,
+  RERENDER_DELAY,
   TYPES,
   MAX_ROOM_NUMBER,
   MIN_CAPACITY,
   ACCURACY,
   ZOOM,
+  Features,
   AccomodationTypes,
   MinAccomodationPrices,
-  priceCategories,
+  PriceCategories,
+  FilterValues,
   IconSizes,
   MainCoordinates
 };
