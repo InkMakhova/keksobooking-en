@@ -45,6 +45,11 @@ const PriceCategories = {
   high: 'high',
 };
 
+const MaxArrangePrices = {
+  maxLow: 10000,
+  maxMiddle: 50000,
+};
+
 const Features = {
   wifi: 'wifi',
   dishwasher: 'dishwasher',
@@ -80,6 +85,7 @@ export {
   AccomodationTypes,
   MinAccomodationPrices,
   PriceCategories,
+  MaxArrangePrices,
   IconSizes,
   MainCoordinates
 };

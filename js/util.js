@@ -1,7 +1,8 @@
 import {
   DEFAULT_FILTER,
   ESC_KEY,
-  PriceCategories
+  PriceCategories,
+  MaxArrangePrices
 } from './constants.js';
 
 const setDisabledAttribute = (fields, isDisabled) => {
@@ -22,9 +23,13 @@ const isFilterMatched = (filterValue, dataField) =>
 
 const isPriceMatched = (filterValue, dataField) =>
   filterValue === DEFAULT_FILTER
-    || (filterValue === PriceCategories.middle && dataField >= 10000 && dataField < 50000)
-      || (filterValue === PriceCategories.low && dataField < 10000)
-        || (filterValue === PriceCategories.high && dataField >= 50000);
+    || (filterValue === PriceCategories.middle
+          && dataField >= MaxArrangePrices.maxLow
+            && dataField < MaxArrangePrices.maxMiddle)
+      || (filterValue === PriceCategories.low
+            && dataField < MaxArrangePrices.maxLow)
+        || (filterValue === PriceCategories.high
+              && dataField >= MaxArrangePrices.maxMiddle);
 
 const isChecked = (checkbox, dataField, fieldValue) =>
   checkbox.checked === false
