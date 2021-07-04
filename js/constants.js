@@ -13,6 +13,13 @@ const TYPES = [
 const MAX_ROOM_NUMBER = 100;
 const MIN_CAPACITY = 0;
 
+const DEFAULT_FILTER = 'any';
+
+const ESC_KEY = {
+  Escape: 'Escape',
+  Esc: 'Esc',
+};
+
 const ACCURACY = 5;
 const ZOOM = 12;
 
@@ -36,13 +43,6 @@ const PriceCategories = {
   middle: 'middle',
   low: 'low',
   high: 'high',
-};
-
-const FilterValues = {
-  type: 'any',
-  price: 'any',
-  rooms: 'any',
-  guests: 'any',
 };
 
 const Features = {
@@ -69,6 +69,8 @@ const MainCoordinates = {
 export {
   ADVERTS_NUMBER,
   RERENDER_DELAY,
+  DEFAULT_FILTER,
+  ESC_KEY,
   TYPES,
   MAX_ROOM_NUMBER,
   MIN_CAPACITY,
@@ -78,7 +80,6 @@ export {
   AccomodationTypes,
   MinAccomodationPrices,
   PriceCategories,
-  FilterValues,
   IconSizes,
   MainCoordinates
 };

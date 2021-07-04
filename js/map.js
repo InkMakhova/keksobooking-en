@@ -5,7 +5,6 @@ import {
   ZOOM,
   Features,
   AccomodationTypes,
-  FilterValues,
   IconSizes,
   MainCoordinates
 } from './constants.js';
@@ -20,6 +19,13 @@ import {
 import {activatePage} from './page.js';
 import {setAddressValue} from './form.js';
 import {getData} from './api.js';
+
+const FilterValues = {
+  type: 'any',
+  price: 'any',
+  rooms: 'any',
+  guests: 'any',
+};
 
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');

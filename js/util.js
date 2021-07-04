@@ -1,4 +1,8 @@
-import {PriceCategories} from './constants.js';
+import {
+  DEFAULT_FILTER,
+  ESC_KEY,
+  PriceCategories
+} from './constants.js';
 
 const setDisabledAttribute = (fields, isDisabled) => {
   fields.forEach((field) => field.disabled = isDisabled);
@@ -10,14 +14,14 @@ const setBlockVisibility = (block, isNoData) => {
   }
 };
 
-const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+const isEscEvent = (evt) => evt.key === ESC_KEY.Escape || evt.key === ESC_KEY.Esc;
 
 const isFilterMatched = (filterValue, dataField) =>
   String(filterValue) === String(dataField)
-    || filterValue === 'any';
+    || filterValue === DEFAULT_FILTER;
 
 const isPriceMatched = (filterValue, dataField) =>
-  filterValue === 'any'
+  filterValue === DEFAULT_FILTER
     || (filterValue === PriceCategories.middle && dataField >= 10000 && dataField < 50000)
       || (filterValue === PriceCategories.low && dataField < 10000)
         || (filterValue === PriceCategories.high && dataField >= 50000);
