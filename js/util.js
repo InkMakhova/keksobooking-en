@@ -34,9 +34,15 @@ const isPriceMatched = (filterValue, dataField) => {
   }
 };
 
-const isChecked = (checkbox, dataField, fieldValue) =>
-  checkbox.checked === false
-    || (dataField && dataField.find((value) => value === fieldValue));
+const isArrayFeaturesMatched = (arrayFilteredFeatures, arrayDataFeatures) => {
+  if (arrayFilteredFeatures.length === 0) {
+    return true;
+  } else if (arrayDataFeatures) {
+    return arrayFilteredFeatures.every((feature) => arrayDataFeatures.includes(feature));
+  } else {
+    return false;
+  }
+};
 
 const debounce = (callback, timeoutDelay) => {
   // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
@@ -62,6 +68,6 @@ export {
   isEscEvent,
   isFilterMatched,
   isPriceMatched,
-  isChecked,
+  isArrayFeaturesMatched,
   debounce
 };

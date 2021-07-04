@@ -50,15 +50,6 @@ const MaxArrangePrices = {
   maxMiddle: 50000,
 };
 
-const Features = {
-  wifi: 'wifi',
-  dishwasher: 'dishwasher',
-  parking: 'parking',
-  washer: 'washer',
-  elevator: 'elevator',
-  conditioner: 'conditioner',
-};
-
 const IconSizes = {
   mainPinWidth: 52,
   mainPinHeight: 52,
@@ -81,7 +72,6 @@ export {
   MIN_CAPACITY,
   ACCURACY,
   ZOOM,
-  Features,
   AccomodationTypes,
   MinAccomodationPrices,
   PriceCategories,

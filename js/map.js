@@ -3,7 +3,6 @@ import {
   RERENDER_DELAY,
   ACCURACY,
   ZOOM,
-  Features,
   AccomodationTypes,
   IconSizes,
   MainCoordinates
@@ -13,7 +12,7 @@ import {
   setDisabledAttribute,
   isFilterMatched,
   isPriceMatched,
-  isChecked,
+  isArrayFeaturesMatched,
   debounce
 } from './util.js';
 import {activatePage} from './page.js';
@@ -32,20 +31,29 @@ const mapCanvas = mapBox.querySelector('#map-canvas');
 
 const mapFilters = document.querySelector('.map__filters');
 const mapFilterFields = mapFilters.querySelectorAll('select');
+
+let enabledFeatures = new Array();
+
+const featureFieldset = document.querySelector('#housing-features');
 const mapFeaturesFilters = mapFilters
   .querySelector('#housing-features')
   .querySelectorAll('.map__checkbox');
 
-const typeFilter = mapFilters.querySelector('#housing-type');
-const priceFilter = mapFilters.querySelector('#housing-price');
-const roomsFilter = mapFilters.querySelector('#housing-rooms');
-const guestsFilter = mapFilters.querySelector('#housing-guests');
-const wifiFilter = mapFilters.querySelector('#filter-wifi');
-const dishwasherFilter = mapFilters.querySelector('#filter-dishwasher');
-const parkingFilter = mapFilters.querySelector('#filter-parking');
-const washerFilter = mapFilters.querySelector('#filter-washer');
-const elevatorFilter = mapFilters.querySelector('#filter-elevator');
-const conditionerFilter = mapFilters.querySelector('#filter-conditioner');
+const FilterFields = {
+  type: mapFilters.querySelector('#housing-type'),
+  price: mapFilters.querySelector('#housing-price'),
+  rooms: mapFilters.querySelector('#housing-rooms'),
+  guests: mapFilters.querySelector('#housing-guests'),
+};
+
+const FeatureFields = {
+  wifi: mapFilters.querySelector('#filter-wifi'),
+  dishwasher: mapFilters.querySelector('#filter-dishwasher'),
+  parking: mapFilters.querySelector('#filter-parking'),
+  washer: mapFilters.querySelector('#filter-washer'),
+  elevator: mapFilters.querySelector('#filter-elevator'),
+  conditioner: mapFilters.querySelector('#filter-conditioner'),
+};
 
 const cardTemplate = document.querySelector('#card')
   .content
@@ -240,48 +248,41 @@ const applyFilter = () => {
     markerGroup.remove();
 
     getData((adverts) => {
-      adverts = adverts.filter((advert) =>
-        isFilterMatched(FilterValues.type, advert.offer.type)
-          && isPriceMatched(FilterValues.price, advert.offer.price)
-            && isFilterMatched(FilterValues.rooms, advert.offer.rooms)
-              && isFilterMatched(FilterValues.guests, advert.offer.guests)
-                && isChecked(wifiFilter, advert.offer.features, Features.wifi)
-                  && isChecked(dishwasherFilter, advert.offer.features, Features.dishwasher)
-                    && isChecked(parkingFilter, advert.offer.features, Features.parking)
-                      && isChecked(washerFilter, advert.offer.features, Features.washer)
-                        && isChecked(elevatorFilter, advert.offer.features, Features.elevator)
-                          && isChecked(conditionerFilter, advert.offer.features, Features.conditioner));
+      adverts = adverts.filter((advert) => {
+        const typeMatched = isFilterMatched(FilterValues.type, advert.offer.type);
+        const priceMatched = isPriceMatched(FilterValues.price, advert.offer.price);
+        const roomsMatched = isFilterMatched(FilterValues.rooms, advert.offer.rooms);
+        const guestsMatched = isFilterMatched(FilterValues.guests, advert.offer.guests);
+        const featuresMatched = isArrayFeaturesMatched(enabledFeatures, advert.offer.features);
+
+        return typeMatched && priceMatched && roomsMatched && guestsMatched
+          && featuresMatched;
+      });
       addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
     }, setDataErrorStatus);
   }, RERENDER_DELAY)();
 };
 
-typeFilter.addEventListener('change', (evt) => {
-  FilterValues.type = evt.target.value;
-  applyFilter();
+Object.keys(FilterValues).forEach((filter) => {
+  FilterFields[filter].addEventListener('change', (evt) => {
+    FilterValues[filter] = evt.target.value;
+    applyFilter();
+  });
 });
 
-priceFilter.addEventListener('change', (evt) => {
-  FilterValues.price = evt.target.value;
-  applyFilter();
+Object.keys(FeatureFields).forEach((feature) => {
+  FeatureFields[feature].addEventListener('click', () => applyFilter());
 });
 
-roomsFilter.addEventListener('change', (evt) => {
-  FilterValues.rooms = evt.target.value;
-  applyFilter();
-});
+featureFieldset.addEventListener('click', () => {
+  const checkedFeatures = featureFieldset.querySelectorAll('input:checked');
 
-guestsFilter.addEventListener('change', (evt) => {
-  FilterValues.guests = evt.target.value;
-  applyFilter();
-});
+  const checkedFeaturesArray = new Array(checkedFeatures.length)
+    .fill(null)
+    .map((_element, index) => checkedFeatures[index].value);
 
-wifiFilter.addEventListener('click', applyFilter);
-dishwasherFilter.addEventListener('click', applyFilter);
-parkingFilter.addEventListener('click', applyFilter);
-washerFilter.addEventListener('click', applyFilter);
-elevatorFilter.addEventListener('click', applyFilter);
-conditionerFilter.addEventListener('click', applyFilter);
+  enabledFeatures = checkedFeaturesArray;
+});
 
 export {
   initMap,
@@ -289,4 +290,3 @@ export {
   resetMap,
   addBaloonsOnMap
 };
-
