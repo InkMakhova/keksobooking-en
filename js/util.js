@@ -21,15 +21,18 @@ const isFilterMatched = (filterValue, dataField) =>
   String(filterValue) === String(dataField)
     || filterValue === DEFAULT_FILTER;
 
-const isPriceMatched = (filterValue, dataField) =>
-  filterValue === DEFAULT_FILTER
-    || (filterValue === PriceCategories.middle
-          && dataField >= MaxArrangePrices.maxLow
-            && dataField < MaxArrangePrices.maxMiddle)
-      || (filterValue === PriceCategories.low
-            && dataField < MaxArrangePrices.maxLow)
-        || (filterValue === PriceCategories.high
-              && dataField >= MaxArrangePrices.maxMiddle);
+const isPriceMatched = (filterValue, dataField) => {
+  switch (filterValue) {
+    case PriceCategories.low:
+      return dataField < MaxArrangePrices.maxLow;
+    case PriceCategories.middle:
+      return dataField >= MaxArrangePrices.maxLow && dataField < MaxArrangePrices.maxMiddle;
+    case PriceCategories.high:
+      return dataField >= MaxArrangePrices.maxMiddle;
+    default:
+      return true;
+  }
+};
 
 const isChecked = (checkbox, dataField, fieldValue) =>
   checkbox.checked === false
