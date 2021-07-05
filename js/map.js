@@ -19,7 +19,7 @@ import {activatePage} from './page.js';
 import {setAddressValue} from './form.js';
 import {getData} from './api.js';
 
-const FilterValues = {
+const filterValues = {
   type: 'any',
   price: 'any',
   rooms: 'any',
@@ -249,10 +249,10 @@ const applyFilter = () => {
 
     getData((adverts) => {
       adverts = adverts.filter((advert) => {
-        const typeMatched = isFilterMatched(FilterValues.type, advert.offer.type);
-        const priceMatched = isPriceMatched(FilterValues.price, advert.offer.price);
-        const roomsMatched = isFilterMatched(FilterValues.rooms, advert.offer.rooms);
-        const guestsMatched = isFilterMatched(FilterValues.guests, advert.offer.guests);
+        const typeMatched = isFilterMatched(filterValues.type, advert.offer.type);
+        const priceMatched = isPriceMatched(filterValues.price, advert.offer.price);
+        const roomsMatched = isFilterMatched(filterValues.rooms, advert.offer.rooms);
+        const guestsMatched = isFilterMatched(filterValues.guests, advert.offer.guests);
         const featuresMatched = isArrayFeaturesMatched(enabledFeatures, advert.offer.features);
 
         return typeMatched && priceMatched && roomsMatched && guestsMatched
@@ -263,9 +263,9 @@ const applyFilter = () => {
   }, RERENDER_DELAY)();
 };
 
-Object.keys(FilterValues).forEach((filter) => {
+Object.keys(filterValues).forEach((filter) => {
   FilterFields[filter].addEventListener('change', (evt) => {
-    FilterValues[filter] = evt.target.value;
+    filterValues[filter] = evt.target.value;
     applyFilter();
   });
 });
