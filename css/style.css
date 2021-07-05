@@ -572,7 +572,8 @@ fieldset {
           box-shadow: 0 0 2px 2px #ff6547;
 }
 
-.ad-form__photo {
+.ad-form__photo,
+.photo-preview__photo {
   margin-right: 10px;
   margin-bottom: 10px;
 

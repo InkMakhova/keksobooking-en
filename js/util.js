@@ -1,6 +1,7 @@
 import {
   DEFAULT_FILTER,
   ESC_KEY,
+  INVALID_FIELD_BORDER,
   PriceCategories,
   MaxArrangePrices
 } from './constants.js';
@@ -61,6 +62,10 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
+const setInvalidStyle = (invalidField) => {
+  invalidField.style.border = INVALID_FIELD_BORDER;
+};
+
 export {
   setDisabledAttribute,
   setBlockVisibility,
@@ -68,5 +73,6 @@ export {
   isFilterMatched,
   isPriceMatched,
   isArrayFeaturesMatched,
-  debounce
+  debounce,
+  setInvalidStyle
 };

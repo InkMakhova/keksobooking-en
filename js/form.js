@@ -1,13 +1,18 @@
-import {isEscEvent} from './util.js';
+import {
+  isEscEvent,
+  setInvalidStyle
+} from './util.js';
 import {
   MESSAGE_DELAY,
   TYPES,
   MAX_ROOM_NUMBER,
   MIN_CAPACITY,
   ACCURACY,
+  INVALID_FIELD_BORDER,
   AccomodationTypes,
   MinAccomodationPrices,
-  MainCoordinates
+  MainCoordinates,
+  DEFAULT_AVATAR_URL
 } from './constants.js';
 import {resetMap} from './map.js';
 import {sendData} from './api.js';
@@ -15,6 +20,7 @@ import {sendData} from './api.js';
 const adForm = document.querySelector('.ad-form');
 const reset = adForm.querySelector('.ad-form__reset');
 
+const avatar = adForm.querySelector('.ad-form-header__preview img');
 const titleInput = adForm.querySelector('#title');
 const addressInput = adForm.querySelector('#address');
 const priceInput = adForm.querySelector('#price');
@@ -24,6 +30,14 @@ const capacity = adForm.querySelector('#capacity');
 const capacityOptions = capacity.querySelectorAll('option');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
+const photoBox = adForm.querySelector('.ad-form__photo');
+const uplodedPhotos = adForm.querySelectorAll('.photo-preview__photo--uploded');
+
+const invalidInputs = adForm.querySelectorAll('input:invalid');
+//invalidInputs.forEach((input) => {
+//  input.style.border = INVALID_FIELD_BORDER;
+//});
+const invalidSelectors = adForm.querySelectorAll('select:invalid');
 
 const successMessageTemplate = document.querySelector('#success')
   .content
@@ -48,6 +62,8 @@ const validateTitle = () => {
   } else {
     titleInput.setCustomValidity('');
   }
+
+  titleInput.reportValidity();
 };
 
 //валидация поля цены
@@ -117,6 +133,15 @@ const showErrorMessage = () => {
   const closeButtonError = errorMessage.querySelector('.error__button');
 
   adForm.insertAdjacentElement('beforeend', errorMessage);
+
+  /*invalidInputs.forEach((input) => {
+    input.style.border = INVALID_FIELD_BORDER;
+  });
+
+  invalidSelectors.forEach((input) => {
+    input.style.border = INVALID_FIELD_BORDER;
+  });*/
+
   closeButtonError.addEventListener('click', () => {
     closeMessage(errorMessage);
   });
@@ -133,8 +158,14 @@ const showErrorMessage = () => {
 //сбрасывает поля формы
 const resetForm = () => {
   adForm.reset();
+  avatar.src = DEFAULT_AVATAR_URL;
   setAddressValue(MainCoordinates.lat, MainCoordinates.lng, ACCURACY);
   priceInput.placeholder = MinAccomodationPrices[TYPES[1]];
+  photoBox.hidden = false;
+  console.log(uplodedPhotos);
+  Object.keys(uplodedPhotos).forEach((key) => {
+    uplodedPhotos[key].remove();
+  });
 };
 
 const reportDataSentSuccess = () => {
@@ -177,6 +208,7 @@ timeOut.addEventListener('change', (evt) => {
 //отправка формы
 const setUserFormSubmit = (onSuccess) => {
   adForm.addEventListener('submit', (evt) => {
+    console.log('here');
     evt.preventDefault();
 
     sendData(

@@ -43,6 +43,8 @@ const MinAccomodationPrices = {
   palace: 10000,
 };
 
+const INVALID_FIELD_BORDER = '2px solid red';
+
 const PriceCategories = {
   middle: 'middle',
   low: 'low',
@@ -83,6 +85,7 @@ export {
   DEFAULT_AVATAR_URL,
   MAIN_PIN_URL,
   PIN_URL,
+  INVALID_FIELD_BORDER,
   AccomodationTypes,
   MinAccomodationPrices,
   PriceCategories,
