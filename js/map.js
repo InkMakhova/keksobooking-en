@@ -21,22 +21,16 @@ import {
 } from './util.js';
 import {activatePage} from './page.js';
 import {setAddressValue} from './form.js';
-import {getData} from './api.js';
 
-const filterValues = {
-  type: 'any',
-  price: 'any',
-  rooms: 'any',
-  guests: 'any',
-};
+let data;
+
+let enabledFeatures = [];
 
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');
 
 const mapFilters = document.querySelector('.map__filters');
 const mapFilterFields = mapFilters.querySelectorAll('select');
-
-let enabledFeatures = [];
 
 const featureFieldset = document.querySelector('#housing-features');
 const mapFeaturesFilters = mapFilters
@@ -50,13 +44,11 @@ const FilterFields = {
   guests: mapFilters.querySelector('#housing-guests'),
 };
 
-const FeatureFields = {
-  wifi: mapFilters.querySelector('#filter-wifi'),
-  dishwasher: mapFilters.querySelector('#filter-dishwasher'),
-  parking: mapFilters.querySelector('#filter-parking'),
-  washer: mapFilters.querySelector('#filter-washer'),
-  elevator: mapFilters.querySelector('#filter-elevator'),
-  conditioner: mapFilters.querySelector('#filter-conditioner'),
+const filterValues = {
+  type: 'any',
+  price: 'any',
+  rooms: 'any',
+  guests: 'any',
 };
 
 const cardTemplate = document.querySelector('#card')
@@ -101,6 +93,10 @@ const mainPinMarker = L.marker(
 );
 
 let markerGroup;
+
+const getData = (loadedData) => {
+  data = loadedData;
+};
 
 const setDataErrorStatus = () => {
   const dataErrorMessage = dataErrorMessageTemplate.cloneNode(true);
@@ -236,13 +232,17 @@ const resetMap = () => {
   mapFilterFields.forEach((field) => {
     field.value = DEFAULT_FILTER;
   });
+
+  Object.keys(filterValues).forEach((key) =>{
+    filterValues[key] = DEFAULT_FILTER;
+  });
+
   mapFeaturesFilters.forEach((filter) => {
     filter.checked = false;
   });
 
-  getData((adverts) => {
-    addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
-  }, setDataErrorStatus);
+  markerGroup.remove();
+  addBaloonsOnMap(data.slice(0, ADVERTS_NUMBER));
 };
 
 setAddressValue(MainCoordinates.lat, MainCoordinates.lng, ACCURACY);
@@ -257,25 +257,23 @@ const applyFilter = () => {
   debounce(() => {
     markerGroup.remove();
 
-    getData((adverts) => {
-      adverts = adverts.filter((advert) => {
-        const typeMatched = isFilterMatched(filterValues.type, advert.offer.type);
-        const priceMatched = isPriceMatched(filterValues.price, advert.offer.price);
-        const roomsMatched = isFilterMatched(filterValues.rooms, advert.offer.rooms);
-        const guestsMatched = isFilterMatched(filterValues.guests, advert.offer.guests);
-        const featuresMatched = isArrayFeaturesMatched(enabledFeatures, advert.offer.features);
+    const filteredData = data.slice().filter((advert) => {
+      const typeMatched = isFilterMatched(filterValues.type, advert.offer.type);
+      const priceMatched = isPriceMatched(filterValues.price, advert.offer.price);
+      const roomsMatched = isFilterMatched(filterValues.rooms, advert.offer.rooms);
+      const guestsMatched = isFilterMatched(filterValues.guests, advert.offer.guests);
+      const featuresMatched = isArrayFeaturesMatched(enabledFeatures, advert.offer.features);
 
-        return typeMatched && priceMatched && roomsMatched && guestsMatched
-          && featuresMatched;
-      });
-      addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
-    }, setDataErrorStatus);
+      return typeMatched && priceMatched && roomsMatched && guestsMatched
+        && featuresMatched;
+    });
+    addBaloonsOnMap(filteredData.slice(0, ADVERTS_NUMBER));
   }, RERENDER_DELAY)();
 };
 
-Object.keys(filterValues).forEach((filter) => {
-  FilterFields[filter].addEventListener('change', (evt) => {
-    filterValues[filter] = evt.target.value;
+Object.keys(filterValues).forEach((key) => {
+  FilterFields[key].addEventListener('change', (evt) => {
+    filterValues[key] = evt.target.value;
     applyFilter();
   });
 });
@@ -292,6 +290,7 @@ featureFieldset.addEventListener('change', () => {
 
 export {
   initMap,
+  getData,
   setDataErrorStatus,
   resetMap,
   addBaloonsOnMap

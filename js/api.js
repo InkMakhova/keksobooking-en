@@ -1,4 +1,4 @@
-const getData = (onSuccess, onFail) => {
+const loadData = (onSuccess, onFail) => {
   fetch('https://23.javascript.pages.academy/keksobooking/data')
     .then((response) => response.json())
     .then(onSuccess)
@@ -22,4 +22,4 @@ const sendData = (onSuccess, onFail, body) => {
     .catch(onFail);
 };
 
-export {getData, sendData};
+export {loadData, sendData};

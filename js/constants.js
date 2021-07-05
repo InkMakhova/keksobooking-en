@@ -2,6 +2,8 @@ const ADVERTS_NUMBER = 10;
 
 const RERENDER_DELAY = 500;
 
+const MESSAGE_DELAY = 1000;
+
 const TYPES = [
   'palace',
   'flat',
@@ -70,6 +72,7 @@ const MainCoordinates = {
 export {
   ADVERTS_NUMBER,
   RERENDER_DELAY,
+  MESSAGE_DELAY,
   DEFAULT_FILTER,
   ESC_KEY,
   TYPES,
