@@ -280,16 +280,14 @@ Object.keys(filterValues).forEach((filter) => {
   });
 });
 
-Object.keys(FeatureFields).forEach((feature) => {
-  FeatureFields[feature].addEventListener('click', () => applyFilter());
-});
-
-featureFieldset.addEventListener('click', () => {
+featureFieldset.addEventListener('change', () => {
   const checkedFeatures = featureFieldset.querySelectorAll('input:checked');
 
   enabledFeatures = new Array(checkedFeatures.length)
     .fill(null)
     .map((_element, index) => checkedFeatures[index].value);
+
+  applyFilter();
 });
 
 export {
