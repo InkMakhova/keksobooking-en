@@ -39,9 +39,8 @@ const isArrayFeaturesMatched = (arrayFilteredFeatures, arrayDataFeatures) => {
     return true;
   } else if (arrayDataFeatures) {
     return arrayFilteredFeatures.every((feature) => arrayDataFeatures.includes(feature));
-  } else {
-    return false;
   }
+  return false;
 };
 
 const debounce = (callback, timeoutDelay) => {
