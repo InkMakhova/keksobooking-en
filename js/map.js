@@ -287,11 +287,9 @@ Object.keys(FeatureFields).forEach((feature) => {
 featureFieldset.addEventListener('click', () => {
   const checkedFeatures = featureFieldset.querySelectorAll('input:checked');
 
-  const checkedFeaturesArray = new Array(checkedFeatures.length)
+  enabledFeatures = new Array(checkedFeatures.length)
     .fill(null)
     .map((_element, index) => checkedFeatures[index].value);
-
-  enabledFeatures = checkedFeaturesArray;
 });
 
 export {
