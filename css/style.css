@@ -380,6 +380,11 @@ fieldset {
   border-radius: 4px;
 }
 
+.ad-form__element--invalid input,
+.ad-form__element--invalid select {
+  border: 2px solid #FF0000;
+}
+
 .ad-form__element input:hover,
 .ad-form__element select:hover,
 .ad-form__element textarea:hover {
@@ -1060,3 +1065,5 @@ fieldset {
 .hidden {
   display: none;
 }
+
+

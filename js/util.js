@@ -1,7 +1,6 @@
 import {
   DEFAULT_FILTER,
   ESC_KEY,
-  INVALID_FIELD_BORDER,
   PriceCategories,
   MaxArrangePrices
 } from './constants.js';
@@ -62,10 +61,6 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-const setInvalidStyle = (invalidField) => {
-  invalidField.style.border = INVALID_FIELD_BORDER;
-};
-
 const isRightFileType = (fileName, rightTypes) =>
   rightTypes.some((typeFile) => fileName.endsWith(typeFile));
 
@@ -77,6 +72,5 @@ export {
   isPriceMatched,
   isArrayFeaturesMatched,
   debounce,
-  setInvalidStyle,
   isRightFileType
 };
