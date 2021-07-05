@@ -241,6 +241,8 @@ const resetMap = () => {
     filter.checked = false;
   });
 
+  enabledFeatures = [];
+
   markerGroup.remove();
   addBaloonsOnMap(data.slice(0, ADVERTS_NUMBER));
 };
@@ -274,6 +276,8 @@ const applyFilter = () => {
 Object.keys(filterValues).forEach((key) => {
   FilterFields[key].addEventListener('change', (evt) => {
     filterValues[key] = evt.target.value;
+    console.log(filterValues);
+    console.log(enabledFeatures);
     applyFilter();
   });
 });
