@@ -32,7 +32,7 @@ const mapCanvas = mapBox.querySelector('#map-canvas');
 const mapFilters = document.querySelector('.map__filters');
 const mapFilterFields = mapFilters.querySelectorAll('select');
 
-let enabledFeatures = new Array();
+let enabledFeatures = [];
 
 const featureFieldset = document.querySelector('#housing-features');
 const mapFeaturesFilters = mapFilters
