@@ -1,4 +1,4 @@
-const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+import {FILE_TYPES} from './constants.js';
 
 const adForm = document.querySelector('.ad-form');
 const fileChooser = adForm.querySelector('#avatar');

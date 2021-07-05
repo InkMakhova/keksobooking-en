@@ -66,6 +66,9 @@ const setInvalidStyle = (invalidField) => {
   invalidField.style.border = INVALID_FIELD_BORDER;
 };
 
+const isRightFileType = (fileName, rightTypes) =>
+  rightTypes.some((typeFile) => fileName.endsWith(typeFile));
+
 export {
   setDisabledAttribute,
   setBlockVisibility,
@@ -74,5 +77,6 @@ export {
   isPriceMatched,
   isArrayFeaturesMatched,
   debounce,
-  setInvalidStyle
+  setInvalidStyle,
+  isRightFileType
 };

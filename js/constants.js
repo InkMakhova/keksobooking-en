@@ -4,6 +4,8 @@ const RERENDER_DELAY = 500;
 
 const MESSAGE_DELAY = 1000;
 
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const TYPES = [
   'palace',
   'flat',
@@ -75,6 +77,7 @@ export {
   ADVERTS_NUMBER,
   RERENDER_DELAY,
   MESSAGE_DELAY,
+  FILE_TYPES,
   DEFAULT_FILTER,
   ESC_KEY,
   TYPES,
