@@ -23,6 +23,8 @@ const ESC_KEY = {
 const ACCURACY = 5;
 const ZOOM = 12;
 
+const DEFAULT_AVATAR_URL = 'img/muffin-grey.svg';
+
 const AccomodationTypes = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -57,6 +59,9 @@ const IconSizes = {
   pinHeight: 40,
 };
 
+const MAIN_PIN_URL = 'img/main-pin.svg';
+const PIN_URL = 'img/pin.svg';
+
 const MainCoordinates = {
   lat: 35.68553153747553,
   lng: 139.75276363268588,
@@ -72,6 +77,9 @@ export {
   MIN_CAPACITY,
   ACCURACY,
   ZOOM,
+  DEFAULT_AVATAR_URL,
+  MAIN_PIN_URL,
+  PIN_URL,
   AccomodationTypes,
   MinAccomodationPrices,
   PriceCategories,

@@ -4,6 +4,9 @@ import {
   RERENDER_DELAY,
   ACCURACY,
   ZOOM,
+  DEFAULT_AVATAR_URL,
+  MAIN_PIN_URL,
+  PIN_URL,
   AccomodationTypes,
   IconSizes,
   MainCoordinates
@@ -81,7 +84,7 @@ const initMap = () => {
 };
 
 const mainPinIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
+  iconUrl: MAIN_PIN_URL,
   iconSize: [IconSizes.mainPinWidth, IconSizes.mainPinHeight],
   iconAnchor: [IconSizes.mainPinWidth / 2, IconSizes.mainPinHeight],
 });
@@ -147,7 +150,7 @@ const createCard = (advert) => {
 
   const avatar = card.querySelector('.popup__avatar');
   if (advert.author.avatar === 0) {
-    avatar.src = 'img/muffin-grey.svg';
+    avatar.src = DEFAULT_AVATAR_URL;
   } else {
     avatar.src = advert.author.avatar;
   }
@@ -192,7 +195,7 @@ const addBaloonsOnMap = (adverts) => {
     const {lat, lng} = element.location;
 
     const icon = L.icon({
-      iconUrl: 'img/pin.svg',
+      iconUrl: PIN_URL,
       iconSize: [IconSizes.pinWidth, IconSizes.pinHeight],
       iconAnchor: [IconSizes.pinWidth / 2, IconSizes.pinHeight],
     });
@@ -229,8 +232,14 @@ const resetMap = () => {
       MainCoordinates.lat.toFixed(ACCURACY),
       MainCoordinates.lng.toFixed(ACCURACY)));
   map.setView([MainCoordinates.lat, MainCoordinates.lng], ZOOM);
-  mapFilterFields.forEach((field) => field.value = DEFAULT_FILTER);
-  mapFeaturesFilters.forEach((filter) => filter.checked = false);
+
+  mapFilterFields.forEach((field) => {
+    field.value = DEFAULT_FILTER;
+  });
+  mapFeaturesFilters.forEach((filter) => {
+    filter.checked = false;
+  });
+
   getData((adverts) => {
     addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
   }, setDataErrorStatus);
