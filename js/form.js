@@ -1,5 +1,6 @@
 import {isEscEvent} from './util.js';
 import {
+  MESSAGE_DELAY,
   TYPES,
   MAX_ROOM_NUMBER,
   MIN_CAPACITY,
@@ -108,7 +109,7 @@ const closeMessage = (message) => {
 const showSuccessMessage = () => {
   const successMessage = successMessageTemplate.cloneNode(true);
   adForm.insertAdjacentElement('beforeend', successMessage);
-  setTimeout(() => {closeMessage(successMessage);}, 1000);
+  setTimeout(() => {closeMessage(successMessage);}, MESSAGE_DELAY);
 };
 
 const showErrorMessage = () => {

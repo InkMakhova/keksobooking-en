@@ -1,22 +1,55 @@
 import {
+  ADVERTS_NUMBER,
+  DEFAULT_FILTER,
+  RERENDER_DELAY,
   ACCURACY,
   ZOOM,
+  DEFAULT_AVATAR_URL,
+  MAIN_PIN_URL,
+  PIN_URL,
   AccomodationTypes,
   IconSizes,
   MainCoordinates
 } from './constants.js';
-import {setBlockVisibility} from './util.js';
+import {
+  setBlockVisibility,
+  setDisabledAttribute,
+  isFilterMatched,
+  isPriceMatched,
+  isArrayFeaturesMatched,
+  debounce
+} from './util.js';
 import {activatePage} from './page.js';
 import {setAddressValue} from './form.js';
+
+let data;
+
+let enabledFeatures = [];
 
 const mapBox = document.querySelector('.map');
 const mapCanvas = mapBox.querySelector('#map-canvas');
 
 const mapFilters = document.querySelector('.map__filters');
 const mapFilterFields = mapFilters.querySelectorAll('select');
+
+const featureFieldset = document.querySelector('#housing-features');
 const mapFeaturesFilters = mapFilters
   .querySelector('#housing-features')
   .querySelectorAll('.map__checkbox');
+
+const FilterFields = {
+  type: mapFilters.querySelector('#housing-type'),
+  price: mapFilters.querySelector('#housing-price'),
+  rooms: mapFilters.querySelector('#housing-rooms'),
+  guests: mapFilters.querySelector('#housing-guests'),
+};
+
+const filterValues = {
+  type: 'any',
+  price: 'any',
+  rooms: 'any',
+  guests: 'any',
+};
 
 const cardTemplate = document.querySelector('#card')
   .content
@@ -43,7 +76,7 @@ const initMap = () => {
 };
 
 const mainPinIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
+  iconUrl: MAIN_PIN_URL,
   iconSize: [IconSizes.mainPinWidth, IconSizes.mainPinHeight],
   iconAnchor: [IconSizes.mainPinWidth / 2, IconSizes.mainPinHeight],
 });
@@ -59,9 +92,13 @@ const mainPinMarker = L.marker(
   },
 );
 
-const markerGroup = L.layerGroup().addTo(map);
+let markerGroup;
 
-const showDataErrorMessage = () => {
+const getData = (loadedData) => {
+  data = loadedData;
+};
+
+const setDataErrorStatus = () => {
   const dataErrorMessage = dataErrorMessageTemplate.cloneNode(true);
   mapCanvas.insertAdjacentElement('beforeend', dataErrorMessage);
 };
@@ -109,7 +146,7 @@ const createCard = (advert) => {
 
   const avatar = card.querySelector('.popup__avatar');
   if (advert.author.avatar === 0) {
-    avatar.src = 'img/muffin-grey.svg';
+    avatar.src = DEFAULT_AVATAR_URL;
   } else {
     avatar.src = advert.author.avatar;
   }
@@ -148,11 +185,13 @@ const createCard = (advert) => {
 };
 
 const addBaloonsOnMap = (adverts) => {
+  markerGroup = L.layerGroup().addTo(map);
+
   adverts.forEach((element, index) => {
     const {lat, lng} = element.location;
 
     const icon = L.icon({
-      iconUrl: 'img/pin.svg',
+      iconUrl: PIN_URL,
       iconSize: [IconSizes.pinWidth, IconSizes.pinHeight],
       iconAnchor: [IconSizes.pinWidth / 2, IconSizes.pinHeight],
     });
@@ -176,6 +215,10 @@ const addBaloonsOnMap = (adverts) => {
         },
       );
   });
+
+  mapFilters.classList.remove('map__filters--disabled');
+  setDisabledAttribute(mapFilterFields, false);
+  setDisabledAttribute(mapFeaturesFilters, false);
 };
 
 //сбрасывает фильтры карты
@@ -185,8 +228,23 @@ const resetMap = () => {
       MainCoordinates.lat.toFixed(ACCURACY),
       MainCoordinates.lng.toFixed(ACCURACY)));
   map.setView([MainCoordinates.lat, MainCoordinates.lng], ZOOM);
-  mapFilterFields.forEach((field) => field.value = 'any');
-  mapFeaturesFilters.forEach((filter) => filter.checked = false);
+
+  mapFilterFields.forEach((field) => {
+    field.value = DEFAULT_FILTER;
+  });
+
+  Object.keys(filterValues).forEach((key) =>{
+    filterValues[key] = DEFAULT_FILTER;
+  });
+
+  mapFeaturesFilters.forEach((filter) => {
+    filter.checked = false;
+  });
+
+  enabledFeatures = [];
+
+  markerGroup.remove();
+  addBaloonsOnMap(data.slice(0, ADVERTS_NUMBER));
 };
 
 setAddressValue(MainCoordinates.lat, MainCoordinates.lng, ACCURACY);
@@ -196,10 +254,46 @@ mainPinMarker.on('moveend', (evt) => {
   setAddressValue(evt.target.getLatLng().lat, evt.target.getLatLng().lng, ACCURACY);
 });
 
+//фильтрация
+const applyFilter = () => {
+  debounce(() => {
+    markerGroup.remove();
+
+    const filteredData = data.slice().filter((advert) => {
+      const typeMatched = isFilterMatched(filterValues.type, advert.offer.type);
+      const priceMatched = isPriceMatched(filterValues.price, advert.offer.price);
+      const roomsMatched = isFilterMatched(filterValues.rooms, advert.offer.rooms);
+      const guestsMatched = isFilterMatched(filterValues.guests, advert.offer.guests);
+      const featuresMatched = isArrayFeaturesMatched(enabledFeatures, advert.offer.features);
+
+      return typeMatched && priceMatched && roomsMatched && guestsMatched
+        && featuresMatched;
+    });
+    addBaloonsOnMap(filteredData.slice(0, ADVERTS_NUMBER));
+  }, RERENDER_DELAY)();
+};
+
+Object.keys(filterValues).forEach((key) => {
+  FilterFields[key].addEventListener('change', (evt) => {
+    filterValues[key] = evt.target.value;
+    applyFilter();
+  });
+});
+
+featureFieldset.addEventListener('change', () => {
+  const checkedFeatures = featureFieldset.querySelectorAll('input:checked');
+
+  enabledFeatures = new Array(checkedFeatures.length)
+    .fill(null)
+    .map((_element, index) => checkedFeatures[index].value);
+
+  applyFilter();
+});
+
 export {
   initMap,
-  showDataErrorMessage,
+  getData,
+  setDataErrorStatus,
   resetMap,
   addBaloonsOnMap
 };
-
