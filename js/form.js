@@ -31,7 +31,6 @@ const capacityOptions = capacity.querySelectorAll('option');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
 const photoBox = adForm.querySelector('.ad-form__photo');
-const uplodedPhotos = adForm.querySelectorAll('.photo-preview__photo--uploded');
 
 const invalidInputs = adForm.querySelectorAll('input:invalid');
 //invalidInputs.forEach((input) => {
@@ -162,9 +161,10 @@ const resetForm = () => {
   setAddressValue(MainCoordinates.lat, MainCoordinates.lng, ACCURACY);
   priceInput.placeholder = MinAccomodationPrices[TYPES[1]];
   photoBox.hidden = false;
-  console.log(uplodedPhotos);
-  Object.keys(uplodedPhotos).forEach((key) => {
-    uplodedPhotos[key].remove();
+
+  const uplodedPhotos = adForm.querySelectorAll('.photo-preview__photo');
+  uplodedPhotos.forEach((photo) => {
+    photo.remove();
   });
 };
 
