@@ -1,5 +1,6 @@
 import {
   ADVERTS_NUMBER,
+  DEFAULT_FILTER,
   RERENDER_DELAY,
   ACCURACY,
   ZOOM,
@@ -228,7 +229,7 @@ const resetMap = () => {
       MainCoordinates.lat.toFixed(ACCURACY),
       MainCoordinates.lng.toFixed(ACCURACY)));
   map.setView([MainCoordinates.lat, MainCoordinates.lng], ZOOM);
-  mapFilterFields.forEach((field) => field.value = 'any');
+  mapFilterFields.forEach((field) => field.value = DEFAULT_FILTER);
   mapFeaturesFilters.forEach((filter) => filter.checked = false);
   getData((adverts) => {
     addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
