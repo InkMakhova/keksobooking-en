@@ -19,8 +19,7 @@ const adForm = document.querySelector('.ad-form');
 const submitButton = adForm.querySelector('.ad-form__submit');
 const reset = adForm.querySelector('.ad-form__reset');
 
-const formInputs = adForm.querySelectorAll('input');
-const formSelectors = adForm.querySelectorAll('select');
+const formFieldsets = adForm.querySelectorAll('.ad-form__element');
 
 const avatar = adForm.querySelector('.ad-form-header__preview img');
 const titleInput = adForm.querySelector('#title');
@@ -153,12 +152,8 @@ const resetForm = () => {
   priceInput.placeholder = MinAccomodationPrices[TYPES[1]];
   photoBox.hidden = false;
 
-  formInputs.forEach((input) => {
-    input.parentNode.classList.remove('ad-form__element--invalid');
-  });
-
-  formSelectors.forEach((select) => {
-    select.parentNode.classList.remove('ad-form__element--invalid');
+  formFieldsets.forEach((fielset) => {
+    fielset.classList.remove('ad-form__element--invalid');
   });
 
   const uplodedPhotos = adForm.querySelectorAll('.photo-preview__photo');
