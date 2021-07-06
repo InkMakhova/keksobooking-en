@@ -1,6 +1,8 @@
 import './map.js';
 import './form.js';
 import './api.js';
+import './avatar.js';
+import './photos.js';
 import {deactivatePage} from './page.js';
 import {
   setUserFormSubmit,

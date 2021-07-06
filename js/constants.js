@@ -4,6 +4,8 @@ const RERENDER_DELAY = 500;
 
 const MESSAGE_DELAY = 1000;
 
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const TYPES = [
   'palace',
   'flat',
@@ -43,6 +45,8 @@ const MinAccomodationPrices = {
   palace: 10000,
 };
 
+const INVALID_FIELD_BORDER = '2px solid red';
+
 const PriceCategories = {
   middle: 'middle',
   low: 'low',
@@ -73,6 +77,7 @@ export {
   ADVERTS_NUMBER,
   RERENDER_DELAY,
   MESSAGE_DELAY,
+  FILE_TYPES,
   DEFAULT_FILTER,
   ESC_KEY,
   TYPES,
@@ -83,6 +88,7 @@ export {
   DEFAULT_AVATAR_URL,
   MAIN_PIN_URL,
   PIN_URL,
+  INVALID_FIELD_BORDER,
   AccomodationTypes,
   MinAccomodationPrices,
   PriceCategories,

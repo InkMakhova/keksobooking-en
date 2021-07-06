@@ -61,6 +61,9 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
+const isRightFileType = (fileName, rightTypes) =>
+  rightTypes.some((typeFile) => fileName.endsWith(typeFile));
+
 export {
   setDisabledAttribute,
   setBlockVisibility,
@@ -68,5 +71,6 @@ export {
   isFilterMatched,
   isPriceMatched,
   isArrayFeaturesMatched,
-  debounce
+  debounce,
+  isRightFileType
 };

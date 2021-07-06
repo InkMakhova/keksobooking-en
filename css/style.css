@@ -380,6 +380,11 @@ fieldset {
   border-radius: 4px;
 }
 
+.ad-form__element--invalid input,
+.ad-form__element--invalid select {
+  border: 2px solid #FF0000;
+}
+
 .ad-form__element input:hover,
 .ad-form__element select:hover,
 .ad-form__element textarea:hover {
@@ -572,7 +577,8 @@ fieldset {
           box-shadow: 0 0 2px 2px #ff6547;
 }
 
-.ad-form__photo {
+.ad-form__photo,
+.photo-preview__photo {
   margin-right: 10px;
   margin-bottom: 10px;
 
@@ -1059,3 +1065,5 @@ fieldset {
 .hidden {
   display: none;
 }
+
+
