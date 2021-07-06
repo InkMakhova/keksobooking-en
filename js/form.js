@@ -44,6 +44,8 @@ const errorMessageTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
 
+const errorMessage = errorMessageTemplate.cloneNode(true);
+
 //устанавливает значение адреса
 const setAddressValue = (latitude, longitude, accuracy) => {
   addressInput.value = `${latitude.toFixed(accuracy)}, ${longitude.toFixed(accuracy)}`;
@@ -130,6 +132,13 @@ const closeMessage = (message) => {
   message.remove();
 };
 
+const closeErrorMessage = (evt) => {
+  if (isEscEvent(evt)) {
+    closeMessage(errorMessage);
+    document.removeEventListener('keydown', closeErrorMessage);
+  }
+};
+
 const showSuccessMessage = () => {
   const successMessage = successMessageTemplate.cloneNode(true);
   body.insertAdjacentElement('beforeend', successMessage);
@@ -137,7 +146,6 @@ const showSuccessMessage = () => {
 };
 
 const showErrorMessage = () => {
-  const errorMessage = errorMessageTemplate.cloneNode(true);
   const closeButtonError = errorMessage.querySelector('.error__button');
 
   body.insertAdjacentElement('beforeend', errorMessage);
@@ -145,14 +153,11 @@ const showErrorMessage = () => {
   closeButtonError.addEventListener('click', () => {
     closeMessage(errorMessage);
   });
-  errorMessage.addEventListener('mousedown', () => {
+  errorMessage.addEventListener('click', () => {
     closeMessage(errorMessage);
   });
-  document.addEventListener('keydown', (evt) => {
-    if (isEscEvent(evt)) {
-      closeMessage(errorMessage);
-    }
-  });
+
+  document.addEventListener('keydown', closeErrorMessage);
 };
 
 //сбрасывает поля формы
@@ -167,8 +172,8 @@ const resetForm = () => {
     fieldset.classList.remove('ad-form__element--invalid');
   });
 
-  const uplodedPhotos = adForm.querySelectorAll('.photo-preview__photo');
-  uplodedPhotos.forEach((photo) => {
+  const uploadedPhotos = adForm.querySelectorAll('.photo-preview__photo');
+  uploadedPhotos.forEach((photo) => {
     photo.remove();
   });
 };
