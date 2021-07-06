@@ -15,7 +15,7 @@ const setBlockVisibility = (block, isNoData) => {
   }
 };
 
-const isEscEvent = (evt) => evt.key === ESC_KEY.Escape || evt.key === ESC_KEY.Esc;
+const isEscEvent = (evt) => ESC_KEY.includes(evt.key);
 
 const isFilterMatched = (filterValue, dataField) =>
   String(filterValue) === String(dataField)

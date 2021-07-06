@@ -23,10 +23,7 @@ const MIN_CAPACITY = 0;
 
 const DEFAULT_FILTER = 'any';
 
-const ESC_KEY = {
-  Escape: 'Escape',
-  Esc: 'Esc',
-};
+const ESC_KEY = ['Escape', 'Esc'];
 
 const ACCURACY = 5;
 const ZOOM = 12;
