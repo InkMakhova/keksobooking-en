@@ -17,6 +17,7 @@ import {
 import {resetMap} from './map.js';
 import {sendData} from './api.js';
 
+const body = document.querySelector('body');
 const adForm = document.querySelector('.ad-form');
 const submitButton = adForm.querySelector('.ad-form__submit');
 const reset = adForm.querySelector('.ad-form__reset');
@@ -96,7 +97,10 @@ const validateCapacity = (guestsNumber, rooms) => {
 
 //получает валидный список вариантов размещения при заданном количестве комнат
 const getValidCapacityOptions = (rooms) => {
-  capacityOptions.forEach((option) => option.disabled = false);
+  capacityOptions.forEach((option) => {
+    option.disabled = false;
+  });
+
   if (rooms === MAX_ROOM_NUMBER) {
     capacityOptions.forEach((option) => {
       if (Number(option.value) !== MIN_CAPACITY) {
@@ -110,6 +114,11 @@ const getValidCapacityOptions = (rooms) => {
       }
     });
   }
+  /*return capacityOptions.forEach((option) => {
+    if (rooms < Number(option.value) || Number(option.value) === MIN_CAPACITY) {
+      option.disabled = true;
+    }
+  });*/
 };
 
 //устанавливает время заезда-выезда
@@ -123,7 +132,7 @@ const closeMessage = (message) => {
 
 const showSuccessMessage = () => {
   const successMessage = successMessageTemplate.cloneNode(true);
-  adForm.insertAdjacentElement('beforeend', successMessage);
+  body.insertAdjacentElement('beforeend', successMessage);
   setTimeout(() => {closeMessage(successMessage);}, MESSAGE_DELAY);
 };
 
@@ -131,7 +140,7 @@ const showErrorMessage = () => {
   const errorMessage = errorMessageTemplate.cloneNode(true);
   const closeButtonError = errorMessage.querySelector('.error__button');
 
-  adForm.insertAdjacentElement('beforeend', errorMessage);
+  body.insertAdjacentElement('beforeend', errorMessage);
 
   closeButtonError.addEventListener('click', () => {
     closeMessage(errorMessage);
