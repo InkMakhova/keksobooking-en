@@ -145,11 +145,7 @@ const createCard = (advert) => {
   }
 
   const avatar = card.querySelector('.popup__avatar');
-  if (!advert.author.avatar) {
-    avatar.src = DEFAULT_AVATAR_URL;
-  } else {
-    avatar.src = advert.author.avatar;
-  }
+  avatar.src = advert.author.avatar ? advert.author.avatar : DEFAULT_AVATAR_URL;
 
   const description = card.querySelector('.popup__description');
   setBlockVisibility(description, !advert.offer.description);
