@@ -138,17 +138,20 @@ const closeErrorMessage = (evt) => {
 const showSuccessMessage = () => {
   const successMessage = successMessageTemplate.cloneNode(true);
   body.insertAdjacentElement('beforeend', successMessage);
-  setTimeout(() => {closeMessage(successMessage);}, MESSAGE_DELAY);
+
+  setTimeout(() => {
+    closeMessage(successMessage);
+  }, MESSAGE_DELAY);
 };
 
 const showErrorMessage = () => {
-  const closeButtonError = errorMessage.querySelector('.error__button');
-
   body.insertAdjacentElement('beforeend', errorMessage);
 
+  const closeButtonError = errorMessage.querySelector('.error__button');
   closeButtonError.addEventListener('click', () => {
     closeMessage(errorMessage);
   });
+
   errorMessage.addEventListener('click', () => {
     closeMessage(errorMessage);
   });
@@ -237,6 +240,7 @@ submitButton.addEventListener('click', () => {
   invalidInputs.forEach((input) => {
     addClass(input, 'ad-form__element--invalid');
   });
+
   invalidSelectors.forEach((select) => {
     addClass(select, 'ad-form__element--invalid');
   });

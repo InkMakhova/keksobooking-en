@@ -231,7 +231,7 @@ const resetMap = () => {
     field.value = DEFAULT_FILTER;
   });
 
-  Object.keys(filterValues).forEach((key) =>{
+  Object.keys(filterValues).forEach((key) => {
     filterValues[key] = DEFAULT_FILTER;
   });
 
@@ -267,6 +267,7 @@ const applyFilter = () => {
       return typeMatched && priceMatched && roomsMatched && guestsMatched
         && featuresMatched;
     });
+
     addBaloonsOnMap(filteredData.slice(0, ADVERTS_NUMBER));
   }, RERENDER_DELAY)();
 };
