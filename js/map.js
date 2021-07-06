@@ -248,25 +248,25 @@ mainPinMarker.on('moveend', (evt) => {
   setAddressValue(evt.target.getLatLng().lat, evt.target.getLatLng().lng, ACCURACY);
 });
 
+const applyFilterDebounced = debounce(() => {
+  markerGroup.remove();
+
+  const filteredData = allAdverts.filter((advert) => {
+    const typeMatched = isFilterMatched(filterValues.type, advert.offer.type);
+    const priceMatched = isPriceMatched(filterValues.price, advert.offer.price);
+    const roomsMatched = isFilterMatched(filterValues.rooms, advert.offer.rooms);
+    const guestsMatched = isFilterMatched(filterValues.guests, advert.offer.guests);
+    const featuresMatched = isArrayFeaturesMatched(enabledFeatures, advert.offer.features);
+
+    return typeMatched && priceMatched && roomsMatched && guestsMatched
+      && featuresMatched;
+  });
+
+  addBaloonsOnMap(filteredData.slice(0, ADVERTS_NUMBER));
+}, RERENDER_DELAY);
+
 //фильтрация
-const applyFilter = () => {
-  debounce(() => {
-    markerGroup.remove();
-
-    const filteredData = allAdverts.filter((advert) => {
-      const typeMatched = isFilterMatched(filterValues.type, advert.offer.type);
-      const priceMatched = isPriceMatched(filterValues.price, advert.offer.price);
-      const roomsMatched = isFilterMatched(filterValues.rooms, advert.offer.rooms);
-      const guestsMatched = isFilterMatched(filterValues.guests, advert.offer.guests);
-      const featuresMatched = isArrayFeaturesMatched(enabledFeatures, advert.offer.features);
-
-      return typeMatched && priceMatched && roomsMatched && guestsMatched
-        && featuresMatched;
-    });
-
-    addBaloonsOnMap(filteredData.slice(0, ADVERTS_NUMBER));
-  }, RERENDER_DELAY)();
-};
+const applyFilter = () => applyFilterDebounced();
 
 Object.keys(filterValues).forEach((key) => {
   filterFields[key].addEventListener('change', (evt) => {
