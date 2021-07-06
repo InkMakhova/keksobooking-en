@@ -98,7 +98,7 @@ const validateCapacity = (guestsNumber, rooms) => {
 };
 
 //получает валидный список вариантов размещения при заданном количестве комнат
-const getValidCapacityOptions = (rooms) => {
+const setValidCapacityOptions = (rooms) => {
   capacityOptions.forEach((option) => {
     option.disabled = false;
   });
@@ -187,13 +187,13 @@ const reportDataSentSuccess = () => {
 //устанавливает плейсхолдер цены при загрузке страницы (если вдруг забыли поменять в разметке)
 priceInput.placeholder = MinAccomodationPrices[typeInput.value];
 //устанавливает валидное значение количества гостей при загрузке страницы
-getValidCapacityOptions(Number(roomNumber.value));
+setValidCapacityOptions(Number(roomNumber.value));
 
 titleInput.addEventListener('input', validateTitle);
 priceInput.addEventListener('input', validatePrice);
 
 roomNumber.addEventListener('change', (evt) => {
-  getValidCapacityOptions(Number(evt.target.value));
+  setValidCapacityOptions(Number(evt.target.value));
   validateCapacity(Number(capacity.value), Number(evt.target.value));
 });
 
