@@ -46,8 +46,6 @@ const MinAccomodationPrices = {
   palace: 10000,
 };
 
-const INVALID_FIELD_BORDER = '2px solid red';
-
 const PriceCategories = {
   middle: 'middle',
   low: 'low',
