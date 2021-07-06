@@ -1,7 +1,7 @@
 import {
   isEscEvent,
   addClass,
-  removeClass,
+  removeClass
 } from './util.js';
 import {
   MESSAGE_DELAY,
