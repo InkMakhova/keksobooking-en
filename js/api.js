@@ -1,5 +1,10 @@
+import {
+  GET_DATA_URL,
+  SEND_DATA_URL
+} from './constants.js';
+
 const loadData = (onSuccess, onFail) => {
-  fetch('https://23.javascript.pages.academy/keksobooking/data')
+  fetch(GET_DATA_URL)
     .then((response) => response.json())
     .then(onSuccess)
     .catch(onFail);
@@ -7,7 +12,7 @@ const loadData = (onSuccess, onFail) => {
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://23.javascript.pages.academy/keksobooking',
+    SEND_DATA_URL,
     {
       method: 'POST',
       body,

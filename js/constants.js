@@ -1,3 +1,7 @@
+const GET_DATA_URL = 'https://23.javascript.pages.academy/keksobooking/data';
+
+const SEND_DATA_URL = 'https://23.javascript.pages.academy/keksobooking';
+
 const ADVERTS_NUMBER = 10;
 
 const RERENDER_DELAY = 500;
@@ -74,6 +78,8 @@ const MainCoordinates = {
 };
 
 export {
+  GET_DATA_URL,
+  SEND_DATA_URL,
   ADVERTS_NUMBER,
   RERENDER_DELAY,
   MESSAGE_DELAY,
