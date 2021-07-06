@@ -109,18 +109,14 @@ const setValidCapacityOptions = (rooms) => {
         option.disabled = true;
       }
     });
-  } else {
-    capacityOptions.forEach((option) => {
-      if (rooms < Number(option.value) || Number(option.value) === MIN_CAPACITY) {
-        option.disabled = true;
-      }
-    });
+    return;
   }
-  /*return capacityOptions.forEach((option) => {
+
+  capacityOptions.forEach((option) => {
     if (rooms < Number(option.value) || Number(option.value) === MIN_CAPACITY) {
       option.disabled = true;
     }
-  });*/
+  });
 };
 
 //устанавливает время заезда-выезда
