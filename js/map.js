@@ -161,7 +161,7 @@ const createCard = (advert) => {
   photosList.innerHTML = '';
 
   //заполняет features данными
-  setBlockVisibility(featuresList, !advert.offer.features);
+  setBlockVisibility(featuresList, !advert.offer.features || advert.offer.features.length === 0);
   if (advert.offer.features) {
     advert.offer.features.forEach((element) => {
       const feature = cardTemplate.querySelector(`.popup__feature--${element}`).cloneNode(true);
@@ -170,7 +170,7 @@ const createCard = (advert) => {
   }
 
   //заполняет photos данными
-  setBlockVisibility(photosList, !advert.offer.photos);
+  setBlockVisibility(photosList, !advert.offer.photos || advert.offer.photos.length === 0);
   if (advert.offer.photos) {
     advert.offer.photos.forEach((element) => {
       const photo = cardTemplate.querySelector('.popup__photo').cloneNode(true);
