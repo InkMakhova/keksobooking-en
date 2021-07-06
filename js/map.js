@@ -33,11 +33,9 @@ const mapFilters = document.querySelector('.map__filters');
 const mapFilterFields = mapFilters.querySelectorAll('select');
 
 const featureFieldset = document.querySelector('#housing-features');
-const mapFeaturesFilters = mapFilters
-  .querySelector('#housing-features')
-  .querySelectorAll('.map__checkbox');
+const mapFeaturesFilters = featureFieldset.querySelectorAll('.map__checkbox');
 
-const FilterFields = {
+const filterFields = {
   type: mapFilters.querySelector('#housing-type'),
   price: mapFilters.querySelector('#housing-price'),
   rooms: mapFilters.querySelector('#housing-rooms'),
@@ -274,7 +272,7 @@ const applyFilter = () => {
 };
 
 Object.keys(filterValues).forEach((key) => {
-  FilterFields[key].addEventListener('change', (evt) => {
+  filterFields[key].addEventListener('change', (evt) => {
     filterValues[key] = evt.target.value;
     applyFilter();
   });
