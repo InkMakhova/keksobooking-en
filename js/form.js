@@ -52,7 +52,7 @@ const setAddressValue = (latitude, longitude, accuracy) => {
 };
 
 //валидация заголовка объявления
-const validateTitle = () => {
+const titleInputHandler = () => {
   if (titleInput.validity.valueMissing) {
     titleInput.setCustomValidity('Обязательное поле для заполнения');
   } else if (!titleInput.validity.valueMissing && titleInput.value.length < titleInput.minLength) {
@@ -67,7 +67,7 @@ const validateTitle = () => {
 };
 
 //валидация поля цены
-const validatePrice = () => {
+const priceInputHandler = () => {
   if (Number(priceInput.value) < MinAccomodationPrices[typeInput.value]) {
     priceInput.setCustomValidity(
       `Минимальная цена за тип размещения ${AccomodationTypes[typeInput.value]} - ${MinAccomodationPrices[typeInput.value]} руб.`);
@@ -82,7 +82,7 @@ const validatePrice = () => {
 };
 
 //валидация поля количества гостей
-const validateCapacity = (guestsNumber, rooms) => {
+const capacityChangeHandler = (guestsNumber, rooms) => {
   if (guestsNumber > rooms) {
     capacity.setCustomValidity('Количество гостей не соотвествует количеству комнат.');
   } else if (guestsNumber < rooms && rooms === MAX_ROOM_NUMBER && guestsNumber !== MIN_CAPACITY) {
@@ -120,7 +120,7 @@ const setValidCapacityOptions = (rooms) => {
 };
 
 //устанавливает время заезда-выезда
-const setTimeOption = (field, evt) => {
+const timeChangeHandler = (field, evt) => {
   field.value = evt.target.value;
 };
 
@@ -128,10 +128,10 @@ const closeMessage = (message) => {
   message.remove();
 };
 
-const closeErrorMessage = (evt) => {
+const errorMessageEscHandler = (evt) => {
   if (isEscEvent(evt)) {
     closeMessage(errorMessage);
-    document.removeEventListener('keydown', closeErrorMessage);
+    document.removeEventListener('keydown', errorMessageEscHandler);
   }
 };
 
@@ -156,7 +156,7 @@ const showErrorMessage = () => {
     closeMessage(errorMessage);
   });
 
-  document.addEventListener('keydown', closeErrorMessage);
+  document.addEventListener('keydown', errorMessageEscHandler);
 };
 
 //сбрасывает поля формы
@@ -188,30 +188,30 @@ priceInput.placeholder = MinAccomodationPrices[typeInput.value];
 //устанавливает валидное значение количества гостей при загрузке страницы
 setValidCapacityOptions(Number(roomNumber.value));
 
-titleInput.addEventListener('input', validateTitle);
-priceInput.addEventListener('input', validatePrice);
+titleInput.addEventListener('input', titleInputHandler);
+priceInput.addEventListener('input', priceInputHandler);
 
 roomNumber.addEventListener('change', (evt) => {
   setValidCapacityOptions(Number(evt.target.value));
-  validateCapacity(Number(capacity.value), Number(evt.target.value));
+  capacityChangeHandler(Number(capacity.value), Number(evt.target.value));
 });
 
 capacity.addEventListener('change', (evt) => {
-  validateCapacity(Number(evt.target.value), Number(roomNumber.value));
+  capacityChangeHandler(Number(evt.target.value), Number(roomNumber.value));
 });
 
 //изменение минимальной цены в placeholder в зависимости от выбора типа размещения
 typeInput.addEventListener('change', (evt) => {
   priceInput.placeholder = MinAccomodationPrices[evt.target.value];
-  validatePrice();
+  priceInputHandler();
 });
 
 //изменение времени выезда/заезда взаимозависимо
 timeIn.addEventListener('change', (evt) => {
-  setTimeOption(timeOut, evt);
+  timeChangeHandler(timeOut, evt);
 });
 timeOut.addEventListener('change', (evt) => {
-  setTimeOption(timeIn, evt);
+  timeChangeHandler(timeIn, evt);
 });
 
 //отправка формы
