@@ -1,5 +1,7 @@
 import {
-  isEscEvent
+  isEscEvent,
+  addClass,
+  removeClass,
 } from './util.js';
 import {
   MESSAGE_DELAY,
@@ -55,7 +57,7 @@ const validateTitle = () => {
       `Поле должно содержать минимум ${titleInput.minLength} символов. Еще ${titleInput.minLength - titleInput.value.length} символов.`);
   } else {
     titleInput.setCustomValidity('');
-    titleInput.parentNode.classList.remove('ad-form__element--invalid');
+    removeClass(titleInput, 'ad-form__element--invalid');
   }
 
   titleInput.reportValidity();
@@ -70,7 +72,7 @@ const validatePrice = () => {
     priceInput.setCustomValidity(`Максимальная цена - ${priceInput.max} руб.`);
   } else {
     priceInput.setCustomValidity('');
-    priceInput.parentNode.classList.remove('ad-form__element--invalid');
+    removeClass(priceInput, 'ad-form__element--invalid');
   }
 
   priceInput.reportValidity();
@@ -86,7 +88,7 @@ const validateCapacity = (guestsNumber, rooms) => {
     capacity.setCustomValidity('Количество гостей не соотвествует количеству комнат.');
   } else {
     capacity.setCustomValidity('');
-    capacity.parentNode.classList.remove('ad-form__element--invalid');
+    removeClass(capacity, 'ad-form__element--invalid');
   }
 
   capacity.reportValidity();
@@ -152,8 +154,8 @@ const resetForm = () => {
   priceInput.placeholder = MinAccomodationPrices[TYPES[1]];
   photoBox.hidden = false;
 
-  formFieldsets.forEach((fielset) => {
-    fielset.classList.remove('ad-form__element--invalid');
+  formFieldsets.forEach((fieldset) => {
+    fieldset.classList.remove('ad-form__element--invalid');
   });
 
   const uplodedPhotos = adForm.querySelectorAll('.photo-preview__photo');
@@ -223,10 +225,10 @@ submitButton.addEventListener('click', () => {
   const invalidSelectors = adForm.querySelectorAll('select:invalid');
 
   invalidInputs.forEach((input) => {
-    input.parentNode.classList.add('ad-form__element--invalid');
+    addClass(input, 'ad-form__element--invalid');
   });
   invalidSelectors.forEach((select) => {
-    select.parentNode.classList.add('ad-form__element--invalid');
+    addClass(select, 'ad-form__element--invalid');
   });
 });
 

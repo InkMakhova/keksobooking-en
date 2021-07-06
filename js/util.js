@@ -64,6 +64,14 @@ const debounce = (callback, timeoutDelay) => {
 const isRightFileType = (fileName, rightTypes) =>
   rightTypes.some((typeFile) => fileName.endsWith(typeFile));
 
+const addClass = (element, className) => {
+  element.parentNode.classList.add(className);
+};
+
+const removeClass = (element, className) => {
+  element.parentNode.classList.remove(className);
+};
+
 export {
   setDisabledAttribute,
   setBlockVisibility,
@@ -72,5 +80,7 @@ export {
   isPriceMatched,
   isArrayFeaturesMatched,
   debounce,
-  isRightFileType
+  isRightFileType,
+  addClass,
+  removeClass
 };
