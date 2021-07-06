@@ -13,13 +13,15 @@ import {
 } from './constants.js';
 import {
   setBlockVisibility,
-  setDisabledAttribute,
   isFilterMatched,
   isPriceMatched,
   isArrayFeaturesMatched,
   debounce
 } from './util.js';
-import {activatePage} from './page.js';
+import {
+  activatePage,
+  activateMapFilters
+} from './page.js';
 import {setAddressValue} from './form.js';
 
 let allAdverts;
@@ -214,9 +216,7 @@ const addBaloonsOnMap = (adverts) => {
       );
   });
 
-  mapFilters.classList.remove('map__filters--disabled');
-  setDisabledAttribute(mapFilterFields, false);
-  setDisabledAttribute(mapFeaturesFilters, false);
+  activateMapFilters();
 };
 
 //сбрасывает фильтры карты

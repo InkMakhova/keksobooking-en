@@ -11,9 +11,9 @@ const mapFeaturesFilters = mapFilters
 
 const deactivatePage = () => {
   adForm.classList.add('ad-form--disabled');
-  mapFilters.classList.add('map__filters--disabled');
-
   setDisabledAttribute(formFields, true);
+
+  mapFilters.classList.add('map__filters--disabled');
   setDisabledAttribute(mapFilterFields, true);
   setDisabledAttribute(mapFeaturesFilters, true);
 };
@@ -23,7 +23,14 @@ const activatePage = () => {
   setDisabledAttribute(formFields, false);
 };
 
+const activateMapFilters = () => {
+  mapFilters.classList.remove('map__filters--disabled');
+  setDisabledAttribute(mapFilterFields, false);
+  setDisabledAttribute(mapFeaturesFilters, false);
+};
+
 export {
   deactivatePage,
-  activatePage
+  activatePage,
+  activateMapFilters
 };

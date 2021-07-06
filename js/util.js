@@ -6,7 +6,9 @@ import {
 } from './constants.js';
 
 const setDisabledAttribute = (fields, isDisabled) => {
-  fields.forEach((field) => field.disabled = isDisabled);
+  fields.forEach((field) => {
+    field.disabled = isDisabled;
+  });
 };
 
 const setBlockVisibility = (block, isNoData) => {
@@ -35,11 +37,14 @@ const isPriceMatched = (filterValue, dataField) => {
 };
 
 const isArrayFeaturesMatched = (arrayFilteredFeatures, arrayDataFeatures) => {
-  if (arrayFilteredFeatures.length === 0) {
+  if (!arrayFilteredFeatures || arrayFilteredFeatures.length === 0) {
     return true;
-  } else if (arrayDataFeatures) {
+  }
+
+  if (arrayDataFeatures && arrayDataFeatures.length !== 0) {
     return arrayFilteredFeatures.every((feature) => arrayDataFeatures.includes(feature));
   }
+
   return false;
 };
 
