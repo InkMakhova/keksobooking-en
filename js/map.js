@@ -257,7 +257,7 @@ const applyFilter = () => {
   debounce(() => {
     markerGroup.remove();
 
-    const filteredData = allAdverts.slice().filter((advert) => {
+    const filteredData = allAdverts.filter((advert) => {
       const typeMatched = isFilterMatched(filterValues.type, advert.offer.type);
       const priceMatched = isPriceMatched(filterValues.price, advert.offer.price);
       const roomsMatched = isFilterMatched(filterValues.rooms, advert.offer.rooms);
