@@ -10,7 +10,7 @@ import {
 } from './form.js';
 import {loadData} from './api.js';
 import {
-  getData,
+  saveData,
   initMap,
   addBaloonsOnMap,
   setDataErrorStatus
@@ -21,7 +21,7 @@ deactivatePage();
 initMap();
 
 loadData((adverts) => {
-  getData(adverts);
+  saveData(adverts);
   addBaloonsOnMap(adverts.slice(0, ADVERTS_NUMBER));
 }, setDataErrorStatus);
 

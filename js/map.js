@@ -22,7 +22,7 @@ import {
 import {activatePage} from './page.js';
 import {setAddressValue} from './form.js';
 
-let data;
+let allAdverts;
 
 let enabledFeatures = [];
 
@@ -94,8 +94,8 @@ const mainPinMarker = L.marker(
 
 let markerGroup;
 
-const getData = (loadedData) => {
-  data = loadedData;
+const saveData = (loadedData) => {
+  allAdverts = loadedData;
 };
 
 const setDataErrorStatus = () => {
@@ -244,7 +244,7 @@ const resetMap = () => {
   enabledFeatures = [];
 
   markerGroup.remove();
-  addBaloonsOnMap(data.slice(0, ADVERTS_NUMBER));
+  addBaloonsOnMap(allAdverts.slice(0, ADVERTS_NUMBER));
 };
 
 setAddressValue(MainCoordinates.lat, MainCoordinates.lng, ACCURACY);
@@ -259,7 +259,7 @@ const applyFilter = () => {
   debounce(() => {
     markerGroup.remove();
 
-    const filteredData = data.slice().filter((advert) => {
+    const filteredData = allAdverts.slice().filter((advert) => {
       const typeMatched = isFilterMatched(filterValues.type, advert.offer.type);
       const priceMatched = isPriceMatched(filterValues.price, advert.offer.price);
       const roomsMatched = isFilterMatched(filterValues.rooms, advert.offer.rooms);
@@ -292,7 +292,7 @@ featureFieldset.addEventListener('change', () => {
 
 export {
   initMap,
-  getData,
+  saveData,
   setDataErrorStatus,
   resetMap,
   addBaloonsOnMap
