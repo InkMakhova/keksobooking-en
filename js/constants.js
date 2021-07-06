@@ -91,7 +91,6 @@ export {
   DEFAULT_AVATAR_URL,
   MAIN_PIN_URL,
   PIN_URL,
-  INVALID_FIELD_BORDER,
   AccomodationTypes,
   MinAccomodationPrices,
   PriceCategories,
