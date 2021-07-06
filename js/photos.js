@@ -1,10 +1,10 @@
 import {FILE_TYPES} from './constants.js';
-import {isRightFileType} from './util.js';
+import {isImgFileType} from './util.js';
 
 const adForm = document.querySelector('.ad-form');
 const fileChooser = adForm.querySelector('#images');
-const boxForUploud = adForm.querySelector('.ad-form__photo-container');
-const previewBox = boxForUploud.querySelector('.ad-form__photo');
+const boxForUpload = adForm.querySelector('.ad-form__photo-container');
+const previewBox = boxForUpload.querySelector('.ad-form__photo');
 
 const previewTemplate = document.querySelector('#photo-preview')
   .content
@@ -19,7 +19,7 @@ fileChooser.addEventListener('change', () => {
     fileNames.push(files[key].name);
   });
 
-  const isRightFiles = fileNames.every((fileName) => isRightFileType(fileName, FILE_TYPES));
+  const isRightFiles = fileNames.every((fileName) => isImgFileType(fileName, FILE_TYPES));
 
   if (isRightFiles) {
     previewBox.hidden = true;
@@ -28,7 +28,7 @@ fileChooser.addEventListener('change', () => {
       const preview = previewTemplate.cloneNode(true);
       const img = preview.querySelector('img');
 
-      boxForUploud.insertAdjacentElement('beforeend', preview);
+      boxForUpload.insertAdjacentElement('beforeend', preview);
 
       const reader = new FileReader();
 

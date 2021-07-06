@@ -61,7 +61,7 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-const isRightFileType = (fileName, rightTypes) =>
+const isImgFileType = (fileName, rightTypes) =>
   rightTypes.some((typeFile) => fileName.endsWith(typeFile));
 
 const addClass = (element, className) => {
@@ -80,7 +80,7 @@ export {
   isPriceMatched,
   isArrayFeaturesMatched,
   debounce,
-  isRightFileType,
+  isImgFileType,
   addClass,
   removeClass
 };
