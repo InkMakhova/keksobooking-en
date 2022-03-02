@@ -1,12 +1,12 @@
-# Кексобукинг — сервис размещения объявлений о сдаче в аренду недвижимости в центре Токио.
+# Keksobooking is a service for placing real estate rental ads in the center of Tokyo.
 
 <a href="https://inkmakhova.github.io/keksobooking-ru/">Demo</a>
 
 ---
-Пользователям предоставляется возможность размещать объявления о своей недвижимости или просматривать уже размещённые объявления.
+Users can post ads about their properties or view already posted ads.
 
 ---
-## Используемые технологии и библиотеки:
+## Used technologies and libraries:
 - HTML & CSS
 - JavaScript
 - Map: Leaflet
