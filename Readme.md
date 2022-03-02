@@ -1,6 +1,6 @@
 # Keksobooking is a service for placing real estate rental ads in the center of Tokyo.
 
-<a href="https://inkmakhova.github.io/keksobooking-ru/">Demo</a>
+<a href="https://inkmakhova.github.io/keksobooking-en/">Demo</a>
 
 ---
 Users can post ads about their properties or view already posted ads.
