@@ -40,10 +40,10 @@ const AccomodationTypes = {
 
 const MinAccomodationPrices = {
   bungalow: 0,
-  flat: 1000,
-  hotel: 3000,
-  house: 5000,
-  palace: 10000,
+  flat: 50,
+  hotel: 100,
+  house: 150,
+  palace: 1000,
 };
 
 const PriceCategories = {
@@ -53,8 +53,8 @@ const PriceCategories = {
 };
 
 const MaxArrangePrices = {
-  maxLow: 10000,
-  maxMiddle: 50000,
+  maxLow: 100,
+  maxMiddle: 500,
 };
 
 const IconSizes = {
