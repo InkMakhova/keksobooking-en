@@ -31,11 +31,11 @@ const ZOOM = 12;
 const DEFAULT_AVATAR_URL = 'img/muffin-grey.svg';
 
 const AccomodationTypes = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
+  flat: 'Flat',
+  bungalow: 'Bungalow',
+  house: 'House',
+  palace: 'Palace',
+  hotel: 'Hotel',
 };
 
 const MinAccomodationPrices = {
